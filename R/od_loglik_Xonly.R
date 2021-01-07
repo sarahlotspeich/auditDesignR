@@ -1,0 +1,47 @@
+#' Observed-data log-likelihood for measurement error settings with errors in exposure only
+#' @name od_loglik_Xonly
+#' @param Y_val Column with the validated outcome (can be name or numeric index).
+#' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index).
+#' @param X_val Column(s) with the validated predictors (can be name or numeric index).
+#' @param Validated Columns with the validation indicator (can be name or numeric index).
+#' @return Scalar function value.
+#' @export
+od_loglik_Xonly <- function(params, dat, Y_val, X_val, X_unval, Validated) {
+  beta <- params[1]
+  eta <- params[-1]
+
+  alpha <- eta[1]
+  gamma_Xstar <- eta[2:4]
+  gamma_X <- eta[5]
+
+  val <- which(as.numeric(dat[, Validated]) == 1)
+
+  # Validated subjects ----------------------------------------------------------------------
+  mu1 <- data.matrix(cbind(1, dat[val, X_val])) %*% matrix(c(alpha, beta), ncol = 1)
+  pY <- prob_logistic(y = dat[val, Y_val], mu = mu1)
+
+  mu3 <- data.matrix(cbind(1, dat[val, c(Y_val, X_val)])) %*% matrix(gamma_Xstar, ncol = 1)
+  pXstar <- prob_logistic(y = dat[val, X_unval], mu = mu3)
+
+  mu4 <- matrix(rep(gamma_X, length(val)), ncol = 1)
+  pX <- prob_logistic(y = dat[val, X_val], mu = mu4)
+
+  l <- sum(log(pXstar) + log(pY) + log(pX))
+
+  # Unvalidated subjects ---------------------------------------------------------------------
+  cd_unval <- rbind(dat[-val, ], dat[-val, ])
+  cd_unval[, X_val] <- rep(c(0, 1), each = nrow(dat[-val, ]))
+
+  mu1 <- data.matrix(cbind(1, cd_unval[, X_val])) %*% matrix(c(alpha, beta), ncol = 1)
+  pY <- prob_logistic(y = cd_unval[, Y_val], mu = mu1)
+
+  mu3 <- data.matrix(cbind(1, cd_unval[, c(Y_val, X_val)])) %*% matrix(gamma_Xstar, ncol = 1)
+  pXstar <- prob_logistic(y = cd_unval[, X_unval], mu = mu3)
+
+  mu4 <- matrix(rep(gamma_X, nrow(cd_unval)), ncol = 1)
+  pX <- prob_logistic(y = cd_unval[, X_val], mu = mu4)
+
+  l <- l + sum(log(rowsum(x = pY * pXstar * pX, group = rep(seq(1, nrow(dat[-val, ])), times = 2))))
+
+  return(- l)
+}
