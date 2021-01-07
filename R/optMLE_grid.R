@@ -17,9 +17,9 @@
 #' @export
 optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_steps = c(40, 20, 10, 5, 1),
                         Y_unval, Y_val, X_unval, X_val, indiv_score, errors_in, return_full_grid = FALSE) {
-  
+
   audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
-  
+
   # Since each of the 4 strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - 4 x min_n
   n_to_allocate <- phII - 4 * min_n
@@ -71,20 +71,20 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
     warning("Unable to find clear minimum. Please select a new starting value.")
     return(all_opt_des)
   }
-  
-  if (return_fulL_grid) { all_grids <- cbind(grid = 1, new_grid) }
-  
+
+  if (return_full_grid) { all_grids <- cbind(grid = 1, new_grid) }
+
   findOptimal <- findFinalOptimal <- FALSE
   skippedLast <- FALSE
   for (step in 2:length(audit_steps_prop)) {
     # To choose min/max for next grid, use previous grid's "optimal" design
     prev_grid_allocated <- prev_min[, c("n00", "n01", "n10", "n11")] - min_n
-    
+
     # If skipped the last grid, keep the wider window
     if (skippedLast) {
       # Run new grid
-      new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step - 1]) / n_to_allocate), 
-                            prop_max = pmin(1, (prev_grid_allocated + audit_windows[step - 1]) / n_to_allocate), 
+      new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step - 1]) / n_to_allocate),
+                            prop_max = pmin(1, (prev_grid_allocated + audit_windows[step - 1]) / n_to_allocate),
                             prop_inc = audit_steps_prop[step],
                             phII = phII,
                             phI_strat = phI_strat,
@@ -92,15 +92,15 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                             n_to_allocate = n_to_allocate)
     } else {
       # Run new grid
-      new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step]) / n_to_allocate), 
-                            prop_max = pmin(1, (prev_grid_allocated + audit_windows[step]) / n_to_allocate), 
+      new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step]) / n_to_allocate),
+                            prop_max = pmin(1, (prev_grid_allocated + audit_windows[step]) / n_to_allocate),
                             prop_inc = audit_steps_prop[step],
                             phII = phII,
                             phI_strat = phI_strat,
                             min_n = min_n,
                             n_to_allocate = n_to_allocate)
     }
-    
+
     if (nrow(new_grid) > 0) {
       new_grid_list <- split(new_grid, seq(nrow(new_grid)))
       for (r in 1:length(new_grid_list)) {
@@ -116,9 +116,9 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                                phI = phI,
                                indiv_score = indiv_score,
                                errors_in = errors_in)
-      
-      # Check that a clear minimum was found 
-      ## And that the new minimum variance is <= the previous 
+
+      # Check that a clear minimum was found
+      ## And that the new minimum variance is <= the previous
       min_var <- min(new_grid$Vbeta)
       findOptimal <- sum(new_grid$Vbeta == min_var) == 1
       if (findOptimal & min_var <= all_opt_des$Vbeta[step - 1]) {
