@@ -1,4 +1,4 @@
-# Optimal validation proportions for likelihood-based methods under outcom eand covariate misclassification
+# Optimal validation proportions for likelihood-based methods under outcome and covariate misclassification
 ## Lotspeich, Shepherd, Amorim, Shaw, and Tao
 The complete R package `auditDesignR` and code for the simulation settings included in the paper. 
 
