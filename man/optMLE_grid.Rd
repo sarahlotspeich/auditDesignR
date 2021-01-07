@@ -9,14 +9,15 @@ optMLE_grid(
   phII,
   phI_strat,
   min_n,
-  window_mult = 3,
+  window_mult = 1,
   audit_steps = c(40, 20, 10, 5, 1),
   Y_unval,
   Y_val,
   X_unval,
   X_val,
   indiv_score,
-  errors_in
+  errors_in,
+  return_full_grid = FALSE
 )
 }
 \arguments{
@@ -28,7 +29,7 @@ optMLE_grid(
 
 \item{min_n}{Minimum stratum size to be sampled.}
 
-\item{window_mult}{Window multiplier for how wide the grid should look on either side of the previous iteration's optimal design. The multiplier applies to the \code{audit_steps}; for example \code{window_mult = 3} (the DEFAULT) will look at a window of 3 times each step around the previous grid's optimal design.}
+\item{window_mult}{Window multiplier for how wide the grid should look on either side of the previous iteration's optimal design. The multiplier applies to the \code{audit_steps}; for example \code{window_mult = 1} (the DEFAULT) will look at a window of 1 times each step around the previous grid's optimal design.}
 
 \item{audit_steps}{A numeric vector (on the person scale). An audit step of 40 defines a grid with 40-person increments between designs. The elements of \code{audit_steps} should share common multiplies to avoid empty grid returns.}
 
@@ -43,6 +44,8 @@ optMLE_grid(
 \item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
 
 \item{errors_in}{Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.}
+
+\item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
 }
 \value{
 Scalar function value.
