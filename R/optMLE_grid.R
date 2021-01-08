@@ -121,7 +121,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
       ## And that the new minimum variance is <= the previous
       min_var <- min(new_grid$Vbeta)
       findOptimal <- sum(new_grid$Vbeta == min_var) == 1
-      if (findOptimal & min_var <= all_opt_des$Vbeta[step - 1]) {
+      if (findOptimal & round(min_var, 8) <= round(all_opt_des$Vbeta[step - 1], 8)) {
         min_var_design <- new_grid[new_grid$Vbeta == min_var, ]
         all_opt_des[step, c("n00", "n01", "n10", "n11", "pi00", "pi01", "pi10", "pi11", "Vbeta")] <- min_var_design
         if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, new_grid)) }
