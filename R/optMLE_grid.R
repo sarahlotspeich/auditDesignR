@@ -124,7 +124,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
       if (findOptimal & min_var <= all_opt_des$Vbeta[step - 1]) {
         min_var_design <- new_grid[new_grid$Vbeta == min_var, ]
         all_opt_des[step, c("n00", "n01", "n10", "n11", "pi00", "pi01", "pi10", "pi11", "Vbeta")] <- min_var_design
-        all_grids <- rbind(all_grids, cbind(grid = step, new_grid))
+        if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, new_grid)) }
         if (step == length(audit_steps_prop)) { findFinalOptimal <- TRUE }
         prev_min <- min_var_design
         skippedLast <- FALSE
