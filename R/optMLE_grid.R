@@ -1,3 +1,20 @@
+#' Adaptive grid search optimization to find the optMLE design
+#' @name optMLE_grid
+#' @param phI Phase I sample size.
+#' @param phII Phase II sample size.
+#' @param phI_strat Phase I stratum sample sizes, named list: \code{N00, N01, N10, N11}.
+#' @param min_n Minimum stratum size to be sampled.
+#' @param window_mult Window multiplier for how wide the grid should look on either side of the previous iteration's optimal design. The multiplier applies to the \code{audit_steps}; for example \code{window_mult = 1} (the DEFAULT) will look at a window of 1 times each step around the previous grid's optimal design.
+#' @param audit_steps A numeric vector (on the person scale). An audit step of 40 defines a grid with 40-person increments between designs. The elements of \code{audit_steps} should share common multiplies to avoid empty grid returns.
+#' @param Y_unval Column with the unvalidated outcome (can be name or numeric index).
+#' @param Y_val Column with the validated outcome (can be name or numeric index).
+#' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index).
+#' @param X_val Column(s) with the validated predictors (can be name or numeric index).
+#' @param indiv_score Matrix of score vectors for all parameters, \code{beta} and \code{eta}.
+#' @param errors_in Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.
+#' @param return_full_grid If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
+#' @return Scalar function value.
+#' @export
 optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_steps = c(40, 20, 10, 5, 1),
                         Y_unval, Y_val, X_unval, X_val, indiv_score, errors_in, return_full_grid = FALSE) {
 
