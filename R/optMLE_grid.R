@@ -18,10 +18,10 @@
 optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_steps = c(10, 1),
                         Y_unval, Y_val, X_unval, X_val, indiv_score, errors_in, return_full_grid = FALSE) {
 
-  if (requireNamespace("parallel", quietly = TRUE)) {
-    useParallel <- TRUE
-  } else { useParallel <- FALSE }
-
+  # if (requireNamespace("parallel", quietly = TRUE)) {
+  #   useParallel <- TRUE
+  # } else { useParallel <- FALSE }
+  useParallel <- FALSE
   audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
 
   # Since each of the 4 strata must have >= min_n subjects
