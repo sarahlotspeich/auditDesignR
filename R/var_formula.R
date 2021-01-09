@@ -27,7 +27,7 @@ var_formula <- function(pi_vec = NULL, Y_unval = NULL, Y_val = NULL, X_unval = N
 
   i <- info(indiv_score = indiv_score, pi_probs = pi_probs, phI_vars = phI_vars)
   cov <- tryCatch(expr = solve(i), error = function(err) {matrix(NA, nrow = nrow(i), ncol = ncol(i))})
-  v_beta <- diag(cov)[1] / phI
+  v_beta <- round(diag(cov)[1] / phI, 8)
   #se_beta <- sqrt(v_beta)
   return(v_beta)
 }
