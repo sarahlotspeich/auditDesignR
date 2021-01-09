@@ -2,7 +2,7 @@
 % Please edit documentation in R/optMLE_grid.R
 \name{optMLE_grid}
 \alias{optMLE_grid}
-\title{Adaptive grid search optimization to find the optMLE design}
+\title{Adaptive grid search optimization to find the optimal design (optMLE)}
 \usage{
 optMLE_grid(
   phI,
@@ -10,7 +10,7 @@ optMLE_grid(
   phI_strat,
   min_n,
   window_mult = 1,
-  audit_steps = c(40, 20, 10, 5, 1),
+  audit_steps = c(10, 1),
   Y_unval,
   Y_val,
   X_unval,
@@ -51,5 +51,5 @@ optMLE_grid(
 Scalar function value.
 }
 \description{
-Adaptive grid search optimization to find the optMLE design
+Adaptive grid search optimization to find the optimal design (optMLE)
 }
