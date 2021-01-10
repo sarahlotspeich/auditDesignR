@@ -148,7 +148,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
         if (step == length(audit_steps_prop)) { findFinalOptimal <- TRUE }
         prev_min <- min_var_design
         skippedLast <- FALSE
-      }
+      } else { skippedLast <- TRUE }
     } else { skippedLast <- TRUE }
     if (skippedLast) { all_opt_des[step, "Vbeta"] <- all_opt_des[step - 1, "Vbeta"]}
   }
