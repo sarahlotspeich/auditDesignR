@@ -18,10 +18,6 @@
 optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_steps = c(10, 1),
                         Y_unval, Y_val, X_unval, X_val, indiv_score, errors_in, return_full_grid = FALSE) {
 
-  # if (requireNamespace("parallel", quietly = TRUE)) {
-  #   useParallel <- TRUE
-  # } else { useParallel <- FALSE }
-  useParallel <- FALSE
   audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
 
   # Since each of the 4 strata must have >= min_n subjects
@@ -53,28 +49,15 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
     new_grid_list[[r]] <- as.numeric((new_grid_list[[r]][,c("pi00", "pi01", "pi10", "pi11")]))
   }
 
-  if (useParallel) {
-    new_grid$Vbeta <- unlist(parallel::mclapply(X = new_grid_list,
-                                                FUN = var_formula,
-                                                Y_unval = Y_unval,
-                                                Y_val = Y_val,
-                                                X_unval = X_unval,
-                                                X_val = X_val,
-                                                phI = phI,
-                                                indiv_score = indiv_score,
-                                                errors_in = errors_in,
-                                                mc.cores = parallel::detectCores()))
-  } else {
-    new_grid$Vbeta <- sapply(X = new_grid_list,
-                             FUN = var_formula,
-                             Y_unval = Y_unval,
-                             Y_val = Y_val,
-                             X_unval = X_unval,
-                             X_val = X_val,
-                             phI = phI,
-                             indiv_score = indiv_score,
-                             errors_in = errors_in)
-  }
+  new_grid$Vbeta <- sapply(X = new_grid_list,
+                           FUN = var_formula,
+                           Y_unval = Y_unval,
+                           Y_val = Y_val,
+                           X_unval = X_unval,
+                           X_val = X_val,
+                           phI = phI,
+                           indiv_score = indiv_score,
+                           errors_in = errors_in)
 
   min_var <- min(new_grid$Vbeta)
   # Check for a clear minimum
@@ -87,7 +70,11 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
     all_opt_des[1, "grid_size"] <- nrow(new_grid)
   } else {
     warning("Unable to find clear minimum. Please select a new starting value.")
-    return(all_opt_des)
+    return(list("all_opt" = NA,
+                "min_var" = 9999,
+                "min_var_design" = NA,
+                "findOptimal" = FALSE,
+                "full_grid_search" = NA))
   }
 
   if (return_full_grid) { all_grids <- cbind(grid = 1, new_grid) }
