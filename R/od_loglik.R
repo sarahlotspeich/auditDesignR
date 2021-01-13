@@ -63,7 +63,7 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
   # Create complete dataset ------------------------------------------------------------------
   X_val_unique <- data.frame(unique(dat[val, X_val]))
   m <- nrow(X_val_unique)
-  cd_unval <- data[rep(unval, each = m), ]
+  cd_unval <- dat[rep(unval, each = m), ]
   cd_unval[, X_val] <- X_val_unique[rep(seq(1, m), times = (N - n)), ]
   cd_unval <- rbind(cd_unval, cd_unval)
   cd_unval[, Y_val] <- rep(c(0, 1), each = ((N - n) * m))
@@ -75,12 +75,12 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
   mu1 <- data.matrix(cbind(1, cd_unval[, c(addl_covar, X_val)])) %*% matrix(c(alpha, beta), ncol = 1)
   pY <- prob_logistic(y = cd_unval[, Y_val], mu = mu1)
 
-  if (!is.null(pYstar)) {
+  if (!is.null(Y_unval)) {
     mu2 <- data.matrix(cbind(1, cd_unval[, c(X_unval, Y_val, X_val, addl_covar)])) %*% matrix(gamma_Ystar, ncol = 1)
     pYstar <- prob_logistic(y = cd_unval[, Y_unval], mu = mu2)
   } else { pYstar <- rep(1, length(pY)) }
 
-  if (!is.null(pXstar)) {
+  if (!is.null(X_unval)) {
     mu3 <- data.matrix(cbind(1, cd_unval[, c(Y_val, X_val, addl_covar)])) %*% matrix(gamma_Xstar, ncol = 1)
     pXstar <- prob_logistic(y = cd_unval[, X_unval], mu = mu3)
   } else { pXstar <- rep(1, length(pY)) }
