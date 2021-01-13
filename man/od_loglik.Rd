@@ -4,18 +4,32 @@
 \alias{od_loglik}
 \title{Observed-data log-likelihood for measurement error settings with errors in outcome + exposure}
 \usage{
-od_loglik(params, dat, Y_val, Y_unval, X_val, X_unval, Validated)
+od_loglik(
+  params,
+  dat,
+  Y_val,
+  Y_unval = NULL,
+  X_val,
+  X_unval = NULL,
+  addl_covar = NULL,
+  Validated,
+  for_nlm = TRUE
+)
 }
 \arguments{
 \item{Y_val}{Column with the validated outcome (can be name or numeric index).}
 
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index).}
+\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).}
 
 \item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
 
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index).}
+\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). If covariates are error-free, \code{X_unval = NULL} (DEFAULT).}
+
+\item{addl_covar}{Column(s) with additional error-free covariates (can be name or numeric index).}
 
 \item{Validated}{Columns with the validation indicator (can be name or numeric index).}
+
+\item{for_nlm}{If \code{TRUE} (DEFAULT), the function returns the negative function value (for use with built-in optimization routines like \code{nlm}).}
 }
 \value{
 Scalar function value.
