@@ -61,12 +61,20 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
   unval <- which(as.numeric(dat[, Validated]) == 0)
 
   # Create complete dataset ------------------------------------------------------------------
-  X_val_unique <- data.frame(unique(dat[val, X_val]))
-  m <- nrow(X_val_unique)
-  cd_unval <- dat[rep(unval, each = m), ]
-  cd_unval[, X_val] <- X_val_unique[rep(seq(1, m), times = (N - n)), ]
-  cd_unval <- rbind(cd_unval, cd_unval)
-  cd_unval[, Y_val] <- rep(c(0, 1), each = ((N - n) * m))
+  if (!is.null(X_unval)) {
+    X_val_unique <- data.frame(unique(dat[val, X_val]))
+    m <- nrow(X_val_unique)
+    cd_unval <- dat[rep(unval, each = m), ]
+    cd_unval[, X_val] <- X_val_unique[rep(seq(1, m), times = (N - n)), ]
+  } else {
+    cd_unval <- dat[unval, ]
+    m <- 1
+  }
+
+  if (!is.null(Y_unval)) {
+    cd_unval <- rbind(cd_unval, cd_unval)
+    cd_unval[, Y_val] <- rep(c(0, 1), each = ((N - n) * m))
+  }
   #cd_unval <- rbind(dat[-val, ], dat[-val, ])
   #cd_unval[, Y_val] <- rep(c(0, 1), each = nrow(dat[-val, ]))
   #cd_unval <- rbind(cd_unval, cd_unval)
