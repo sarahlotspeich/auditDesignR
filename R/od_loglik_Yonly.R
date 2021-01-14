@@ -5,7 +5,6 @@
 #' @param X_val Column(s) with the validated predictors (can be name or numeric index).
 #' @param Validated Columns with the validation indicator (can be name or numeric index).
 #' @return Scalar function value.
-#' @export
 od_loglik_Yonly <- function(params, dat, Y_val, Y_unval, X_val, Validated) {
   beta <- params[1]
   eta <- params[-1]
