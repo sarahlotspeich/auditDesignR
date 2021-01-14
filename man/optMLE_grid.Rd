@@ -10,7 +10,8 @@ optMLE_grid(
   phI_strat,
   min_n,
   window_mult = 1,
-  audit_steps = c(10, 1),
+  audit_steps,
+  max_window_mult = 3,
   Y_unval,
   Y_val,
   X_unval,
@@ -32,6 +33,8 @@ optMLE_grid(
 \item{window_mult}{Window multiplier for how wide the grid should look on either side of the previous iteration's optimal design. The multiplier applies to the \code{audit_steps}; for example \code{window_mult = 1} (the DEFAULT) will look at a window of 1 times each step around the previous grid's optimal design.}
 
 \item{audit_steps}{A numeric vector (on the person scale). An audit step of 40 defines a grid with 40-person increments between designs. The elements of \code{audit_steps} should share common multiplies to avoid empty grid returns.}
+
+\item{max_window_mult}{If \code{window_mult} fails to find a minimum, it will increase up to \code{max_window_mult} and try again. The DEFAULT is \code{max_window_mult = 3}.}
 
 \item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index).}
 
