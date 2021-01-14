@@ -5,12 +5,13 @@
 #' @param Y_val Column with the validated outcome (can be name or numeric index).
 #' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "Y only"}.)
 #' @param X_val Column(s) with the validated predictors (can be name or numeric index).
+#' @param addl_covar Column(s) with additional error-free covariates (can be name or numeric index).
 #' @param indiv_score Matrix of score vectors for all parameters, \code{beta} and \code{eta}.
 #' @param phI Phase I sample size.
 #' @param errors_in Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.
 #' @return Scalar function value for Var(beta).
 #' @export
-var_formula <- function(pi_vec = NULL, Y_unval = NULL, Y_val = NULL, X_unval = NULL, X_val = NULL, phI, indiv_score, errors_in = "Both") {
+var_formula <- function(pi_vec = NULL, Y_unval = NULL, Y_val = NULL, X_unval = NULL, X_val = NULL, addl_covar = NULL, phI, indiv_score, errors_in = "Both") {
 
   pi_probs <- data.frame(Var1 = c(0, 0, 1, 1),
                          Var2 = c(0, 1, 0, 1),

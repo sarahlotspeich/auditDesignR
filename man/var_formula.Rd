@@ -10,6 +10,7 @@ var_formula(
   Y_val = NULL,
   X_unval = NULL,
   X_val = NULL,
+  addl_covar = NULL,
   phI,
   indiv_score,
   errors_in = "Both"
@@ -25,6 +26,8 @@ var_formula(
 \item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "Y only"}.)}
 
 \item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
+
+\item{addl_covar}{Column(s) with additional error-free covariates (can be name or numeric index).}
 
 \item{phI}{Phase I sample size.}
 
