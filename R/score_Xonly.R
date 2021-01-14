@@ -8,7 +8,6 @@
 #' @param beta Parameter value for the log odds ratio of \code{X_val} on \code{Y_val}.
 #' @param eta Parameter values for other nuisance parameters.
 #' @return Matrix with one column for the score vector for each parameter \code{beta}, \code{eta}.
-#' @export
 score_Xonly <- function(comp_dat, Y_val, X_val, X_unval, Validated, beta, eta) {
   val <- which(comp_dat[, Validated] == 1)
   n <- length(val)

@@ -145,16 +145,23 @@ score <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_c
   Si_theta_v <- Si_theta[val, ]
 
   # Unvalidated
-  PhI_vars <- c(Y_unval, X_unval, addl_covar)
+  if (!is.null(Y_unval) & !is.null(X_unval)) {
+    PhI_vars <- c(Y_unval, X_unval, addl_covar)
+  } else if (!is.null(Y_unval)) {
+    PhI_vars <- c(Y_unval, X_val, addl_covar)
+  } else if (!is.null(X_unval)) {
+    PhI_vars <- c(Y_val, X_unval, addl_covar)
+  }
   Si_theta$PhI_strat <- apply(X = Si_theta[, PhI_vars], MARGIN = 1, FUN = paste, collapse = ",")
-    #paste0("(", Si_theta[, Y_unval], ",", Si_theta[, X_unval], ")")
   denom <- rowsum(x = joint_uv, group = Si_theta[-val, "PhI_strat"], reorder = F)
 
   ## (among unvalidated) Get the joint distributions of (Y*, X*, Z) -
   phI_joint_uv <- rowsum(x = joint_uv, group = Si_theta[-val, "PhI_strat"], reorder = FALSE)
 
   Si_theta_uv <- Si_theta[-val, ]
-  Si_theta_uv[, Y_val] <- Si_theta_uv[, X_val] <- NA
+  if (!is.null(Y_unval)) { Si_theta_uv[, Y_val] <- NA }
+  if (!is.null(X_unval)) { Si_theta_uv[, X_val] <- NA }
+  #Si_theta_uv[, Y_val] <- Si_theta_uv[, X_val] <- NA
   Si_theta_uv <- unique(Si_theta_uv)
 
   score_cols <- grep(pattern = "Si_", colnames(Si_theta_uv)) # indices for score columns in Si_theta

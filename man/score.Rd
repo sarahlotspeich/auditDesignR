@@ -4,18 +4,30 @@
 \alias{score}
 \title{Score vectors for measurement error setting with errors in outcome + exposure}
 \usage{
-score(comp_dat, Y_val, Y_unval, X_val, X_unval, Validated, beta, eta)
+score(
+  comp_dat,
+  Y_val,
+  Y_unval = NULL,
+  X_val,
+  X_unval = NULL,
+  addl_covar = NULL,
+  Validated,
+  beta,
+  eta
+)
 }
 \arguments{
 \item{comp_dat}{Dataframe with complete data.}
 
 \item{Y_val}{Column with the validated outcome (can be name or numeric index).}
 
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index).}
+\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).}
 
 \item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
 
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index).}
+\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). If covariates are error-free, \code{X_unval = NULL} (DEFAULT).}
+
+\item{addl_covar}{Column(s) with additional error-free covariates (can be name or numeric index).}
 
 \item{Validated}{Columns with the validation indicator (can be name or numeric index).}
 
