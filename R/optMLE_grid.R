@@ -106,6 +106,17 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                             n_to_allocate = n_to_allocate)
     }
 
+    if (nrow(new_grid) == 0 & step == length(audit_steps_prop)) {
+      # Run new grid
+      new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step - 1]) / n_to_allocate),
+                            prop_max = pmin(1, (prev_grid_allocated + audit_windows[step - 1]) / n_to_allocate),
+                            prop_inc = audit_steps_prop[step],
+                            phII = phII,
+                            phI_strat = phI_strat,
+                            min_n = min_n,
+                            n_to_allocate = n_to_allocate)
+    }
+
     if (nrow(new_grid) > 0) {
       new_grid_list <- split(new_grid, seq(nrow(new_grid)))
       for (r in 1:length(new_grid_list)) {
