@@ -138,6 +138,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
         if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, new_grid)) }
         if (step == length(audit_steps_prop)) { findFinalOptimal <- TRUE }
         prev_min <- min_var_design
+        try_wider <- FALSE
       } else { try_wider <- TRUE }
     }
 
