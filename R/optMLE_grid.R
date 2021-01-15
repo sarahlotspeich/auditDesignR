@@ -131,7 +131,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
       min_var <- min(new_grid$Vbeta)
       findOptimal <- sum(new_grid$Vbeta == min_var) == 1
 
-      if (findOptimal & min_var <= all_opt_des$Vbeta[step - 1]) {
+      if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
         min_var_design <- new_grid[new_grid$Vbeta == min_var, ]
         all_opt_des[step, c("n00", "n01", "n10", "n11", "pi00", "pi01", "pi10", "pi11", "Vbeta")] <- min_var_design
         all_opt_des[step, "grid_size"] <- nrow(new_grid)
@@ -143,7 +143,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
     }
 
     if (try_wider) {
-      while (min_var > all_opt_des$Vbeta[step - 1] & step_mult < max_window_mult) {
+      while ((min_var - all_opt_des$Vbeta[step - 1]) >= 1E-8 & step_mult < max_window_mult) {
         step_mult <- step_mult + 1
         audit_windows[step] <- step_mult * c(NA, audit_steps[-length(audit_steps)])[step]
         new_grid <- prop_grid(prop_min = pmax(0, (prev_grid_allocated - audit_windows[step]) / n_to_allocate),
@@ -175,7 +175,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
           min_var <- min(new_grid$Vbeta)
           findOptimal <- sum(new_grid$Vbeta == min_var) == 1
 
-          if (findOptimal & min_var <= all_opt_des$Vbeta[step - 1]) {
+          if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
             min_var_design <- new_grid[new_grid$Vbeta == min_var, ]
             all_opt_des[step, c("n00", "n01", "n10", "n11", "pi00", "pi01", "pi10", "pi11", "Vbeta")] <- min_var_design
             all_opt_des[step, "grid_size"] <- nrow(new_grid)
