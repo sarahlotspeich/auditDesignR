@@ -61,8 +61,19 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                            errors_in = errors_in)
 
   min_var <- min(new_grid$Vbeta)
+
+  if (is.na(min_var)) {
+    return(list("all_opt" = NA,
+                "min_var" = 9999,
+                "min_var_design" = NA,
+                "findOptimal" = FALSE,
+                "full_grid_search" = NA,
+                "message" = "Singular information"))
+  }
+
   # Check for a clear minimum
-  if (sum(new_grid$Vbeta == min_var) == 1) {
+  findOptimal <- sum(new_grid$Vbeta == min_var) == 1
+  if (findOptimal) {
     min_var_design <- new_grid[new_grid$Vbeta == min_var,]
     # Sort grid by V(beta) smallest -> largest
     new_grid <- new_grid[order(new_grid$Vbeta),]
@@ -75,7 +86,8 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                 "min_var" = 9999,
                 "min_var_design" = NA,
                 "findOptimal" = FALSE,
-                "full_grid_search" = NA))
+                "full_grid_search" = NA,
+                "message" = "Insufficient starting grid size"))
   }
 
   if (return_full_grid) { all_grids <- cbind(grid = 1, new_grid) }
@@ -129,6 +141,16 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
       # Check that a clear minimum was found
       ## And that the new minimum variance is <= the previous
       min_var <- min(new_grid$Vbeta)
+
+      if (is.na(min_var)) {
+        return(list("all_opt" = NA,
+                    "min_var" = 9999,
+                    "min_var_design" = NA,
+                    "findOptimal" = FALSE,
+                    "full_grid_search" = NA,
+                    "message" = "Singular information"))
+      }
+
       findOptimal <- sum(new_grid$Vbeta == min_var) == 1
 
       if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
@@ -173,6 +195,16 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
           # Check that a clear minimum was found
           ## And that the new minimum variance is <= the previous
           min_var <- min(new_grid$Vbeta)
+
+          if (is.na(min_var)) {
+            return(list("all_opt" = NA,
+                        "min_var" = 9999,
+                        "min_var_design" = NA,
+                        "findOptimal" = FALSE,
+                        "full_grid_search" = NA,
+                        "message" = "Singular information"))
+          }
+
           findOptimal <- sum(new_grid$Vbeta == min_var) == 1
 
           if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
@@ -204,5 +236,6 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
               "min_var" = min_var,
               "min_var_design" = min_var_design,
               "findOptimal" = findFinalOptimal,
-              "full_grid_search" = all_grids))
+              "full_grid_search" = all_grids,
+              "message" = "Grid search successful"))
 }
