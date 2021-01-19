@@ -237,5 +237,5 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
               "min_var_design" = min_var_design,
               "findOptimal" = findFinalOptimal,
               "full_grid_search" = all_grids,
-              "message" = "Grid search successful"))
+              "message" = ifelse(findFinalOptimal, "Grid search successful", "Grid completed without finding minimum")))
 }
