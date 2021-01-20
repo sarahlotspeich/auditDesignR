@@ -3,7 +3,7 @@
 #' @param pi_vec Vector of sampling probabilities (returned from \code{calc_pi_vec}).
 #' @param phI Phase I sample size.
 #' @param indiv_score Matrix of score vectors for all parameters, \code{beta} and \code{eta} (returned from \code{score}).
-#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, \code{var_formula} can handle sampling on up to 3 variables.
+#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.
 #' @return Scalar function value for Var(beta).
 #' @export
 var_formula <- function(pi_vec = NULL, phI, indiv_score, sample_on) {

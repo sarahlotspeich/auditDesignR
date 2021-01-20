@@ -13,7 +13,7 @@ var_formula(pi_vec = NULL, phI, indiv_score, sample_on)
 
 \item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta} (returned from \code{score}).}
 
-\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, \code{var_formula} can handle sampling on up to 3 variables.}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.}
 }
 \value{
 Scalar function value for Var(beta).
