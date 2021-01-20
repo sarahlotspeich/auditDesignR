@@ -4,36 +4,16 @@
 \alias{var_formula}
 \title{Derived asymptotic variance of the MLE for beta, the logOR of X on Y}
 \usage{
-var_formula(
-  pi_vec = NULL,
-  Y_unval = NULL,
-  Y_val = NULL,
-  X_unval = NULL,
-  X_val = NULL,
-  addl_covar = NULL,
-  phI,
-  indiv_score,
-  errors_in = "Both"
-)
+var_formula(pi_vec = NULL, phI, indiv_score, sample_on)
 }
 \arguments{
 \item{pi_vec}{Vector of sampling probabilities (returned from \code{calc_pi_vec}).}
 
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "X only"}.)}
-
-\item{Y_val}{Column with the validated outcome (can be name or numeric index).}
-
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "Y only"}.)}
-
-\item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
-
-\item{addl_covar}{Column(s) with additional error-free covariates (can be name or numeric index).}
-
 \item{phI}{Phase I sample size.}
 
-\item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
+\item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta} (returned from \code{score}).}
 
-\item{errors_in}{Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, \code{var_formula} can handle sampling on up to 3 variables.}
 }
 \value{
 Scalar function value for Var(beta).

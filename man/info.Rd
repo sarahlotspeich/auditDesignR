@@ -4,14 +4,14 @@
 \alias{info}
 \title{Information matrix for two-phase measurement error problems.}
 \usage{
-info(pi_probs, indiv_score, phI_vars)
+info(pi_probs, indiv_score, sample_on)
 }
 \arguments{
-\item{pi_probs}{Dataframe of sampling probabilities, including \code{phI_vars}.}
+\item{pi_probs}{Dataframe of sampling probabilities, including \code{sample_on}.}
 
 \item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
 
-\item{phI_vars}{Columns with the Phase I variables used for sampling strata (can be name or numeric index).}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index).}
 }
 \value{
 Information matrix.
