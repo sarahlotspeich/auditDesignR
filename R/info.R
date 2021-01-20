@@ -1,15 +1,15 @@
 #' Information matrix for two-phase measurement error problems.
 #' @name info
-#' @param pi_probs Dataframe of sampling probabilities, including \code{phI_vars}.
+#' @param pi_probs Dataframe of sampling probabilities, including \code{sample_on}.
 #' @param indiv_score Matrix of score vectors for all parameters, \code{beta} and \code{eta}.
-#' @param phI_vars Columns with the Phase I variables used for sampling strata (can be name or numeric index).
+#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index).
 #' @return Information matrix.
 #' @export
-info <- function(pi_probs, indiv_score,  phI_vars) {
+info <- function(pi_probs, indiv_score, sample_on) {
 
   # Based on pi_probs calculate P(V) for all Y*/X*
-  pi_probs_full <- rbind(cbind(pi_probs[, phI_vars], V = 1, pV = pi_probs[, "pV1"]),
-                         cbind(pi_probs[, phI_vars], V = 0, pV = (1 - pi_probs[, "pV1"])))
+  pi_probs_full <- rbind(cbind(pi_probs[, sample_on], V = 1, pV = pi_probs[, "pV1"]),
+                         cbind(pi_probs[, sample_on], V = 0, pV = (1 - pi_probs[, "pV1"])))
 
   # Merge P(V) into the indiv_score
   indiv_score_full <- merge(x = indiv_score, y = pi_probs_full)
