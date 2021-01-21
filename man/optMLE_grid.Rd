@@ -12,12 +12,8 @@ optMLE_grid(
   window_mult = 1,
   audit_steps,
   max_window_mult = 3,
-  Y_unval,
-  Y_val,
-  X_unval,
-  X_val,
+  sample_on,
   indiv_score,
-  errors_in,
   return_full_grid = FALSE
 )
 }
@@ -36,17 +32,9 @@ optMLE_grid(
 
 \item{max_window_mult}{If \code{window_mult} fails to find a minimum, it will increase up to \code{max_window_mult} and try again. The DEFAULT is \code{max_window_mult = 3}.}
 
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index).}
-
-\item{Y_val}{Column with the validated outcome (can be name or numeric index).}
-
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index).}
-
-\item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.}
 
 \item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
-
-\item{errors_in}{Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.}
 
 \item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
 }
