@@ -1,9 +1,10 @@
 #' @export
 prop_grid <- function(prop_min, prop_max, prop_inc, prev_grid = NULL, phI_strat, phII, min_n, n_to_allocate) {
-  if (length(phI_strat) == 2) {
+  num_strat <- length(phI_strat)
+  if (num_strat == 2) {
     grid <- expand.grid(prop_n0 = unique(seq(prop_min[1], prop_max[1], by = prop_inc), prev_grid[[1]] / n_to_allocate),
                         prop_n1 = unique(seq(prop_min[2], prop_max[2], by = prop_inc), prev_grid[[2]] / n_to_allocate))
-  } else if (length(phI_strat) == 4) {
+  } else if (num_strat == 4) {
     grid <- expand.grid(prop_n00 = unique(seq(prop_min[1], prop_max[1], by = prop_inc), prev_grid[[1]] / n_to_allocate),
                         prop_n01 = unique(seq(prop_min[2], prop_max[2], by = prop_inc), prev_grid[[2]] / n_to_allocate),
                         prop_n10 = unique(seq(prop_min[3], prop_max[3], by = prop_inc), prev_grid[[3]] / n_to_allocate),
@@ -17,7 +18,7 @@ prop_grid <- function(prop_min, prop_max, prop_inc, prev_grid = NULL, phI_strat,
     grid$n11 <- grid$prop_n11 * n_to_allocate
 
     #grid[, c("n00", "n01", "n10", "n11")] <- grid[, c("n00", "n01", "n10", "n11")] + min_n
-  } else if (length(phI_strat) == 8) {
+  } else if (num_strat == 8) {
     grid <- expand.grid(prop_n00_0 = unique(seq(prop_min[1], prop_max[1], by = prop_inc), prev_grid[[1]] / n_to_allocate),
                         prop_n01_0 = unique(seq(prop_min[2], prop_max[2], by = prop_inc), prev_grid[[2]] / n_to_allocate),
                         prop_n10_0 = unique(seq(prop_min[3], prop_max[3], by = prop_inc), prev_grid[[3]] / n_to_allocate),
