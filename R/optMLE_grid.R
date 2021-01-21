@@ -16,7 +16,6 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                         sample_on, indiv_score, return_full_grid = FALSE) {
 
   audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
-  audit_steps_prop <- audit_steps / n_to_allocate
 
   num_strat <- 2 ^ length(sample_on)
   if (length(sample_on) == 1) {
@@ -56,7 +55,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
   } else {
     return(warning("You are attempting to sample on too many variables."))
   }
-
+  audit_steps_prop <- audit_steps / n_to_allocate
   # Run initial grid search
   new_grid <- prop_grid(prop_min = rep(0, num_strat),
                         prop_max = rep(1, num_strat),
