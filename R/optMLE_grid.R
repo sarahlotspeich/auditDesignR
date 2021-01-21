@@ -14,9 +14,8 @@
 #' @export
 optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_steps, max_window_mult = 3,
                         sample_on, indiv_score, return_full_grid = FALSE) {
-
-  audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
-
+  #audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
+  audit_windows <- ceiling(c(NA, audit_steps[-length(audit_steps)]) / audit_steps ) * audit_steps #c(NA, audit_steps[-length(audit_steps)])
   num_strat <- 2 ^ length(sample_on)
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
