@@ -4,6 +4,11 @@ prop_grid <- function(prop_min, prop_max, prop_inc, prev_grid = NULL, phI_strat,
   if (num_strat == 2) {
     grid <- expand.grid(prop_n0 = unique(seq(prop_min[1], prop_max[1], by = prop_inc), prev_grid[[1]] / n_to_allocate),
                         prop_n1 = unique(seq(prop_min[2], prop_max[2], by = prop_inc), prev_grid[[2]] / n_to_allocate))
+
+    grid <- grid[rowSums(grid) == 1, ]
+
+    grid$n0 <- grid$prop_n0 * n_to_allocate
+    grid$n1 <- grid$prop_n1 * n_to_allocate
   } else if (num_strat == 4) {
     grid <- expand.grid(prop_n00 = unique(seq(prop_min[1], prop_max[1], by = prop_inc), prev_grid[[1]] / n_to_allocate),
                         prop_n01 = unique(seq(prop_min[2], prop_max[2], by = prop_inc), prev_grid[[2]] / n_to_allocate),
