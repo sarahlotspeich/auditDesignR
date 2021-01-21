@@ -61,7 +61,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                         n_to_allocate = n_to_allocate)
 
   if (nrow(new_grid) == 0) {
-    warning("Unable to find clear minimum. Please select a new starting value.")
+    warning("Insufficient grid space. Please select a new starting value.")
     return(list("all_opt" = NA,
                 "min_var" = 9999,
                 "min_var_design" = NA,
