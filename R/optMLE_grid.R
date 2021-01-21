@@ -112,7 +112,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
   #findOptimal <- findFinalOptimal <- FALSE
   for (step in 2:length(audit_steps_prop)) {
     # Reset indicator
-    findOptimal <- FALSE
+    findOptimal <- findFinalOptimal <- FALSE
 
     # Reset audit window for this step
     step_mult <- window_mult
@@ -168,9 +168,9 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                     "message" = "Singular information"))
       }
 
-      findOptimal <- sum(new_grid$Vbeta == min_var) == 1
+      findOptimal <- sum(new_grid$Vbeta == min_var) == 1 & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8
 
-      if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
+      if (findOptimal) {
         min_var_design <- prev_min <- new_grid[new_grid$Vbeta == min_var,]
         all_opt_des[step, -c(1:4)] <-  c(min_var_design, nrow(new_grid))
         if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, new_grid)) }
@@ -216,9 +216,9 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                         "message" = "Singular information"))
           }
 
-          findOptimal <- sum(new_grid$Vbeta == min_var) == 1
+          findOptimal <- sum(new_grid$Vbeta == min_var) == 1 & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8
 
-          if (findOptimal & (min_var - all_opt_des$Vbeta[step - 1]) < 1E-8) {
+          if (findOptimal) {
             min_var_design <- prev_min <- new_grid[new_grid$Vbeta == min_var,]
             all_opt_des[step, -c(1:4)] <-  c(min_var_design, nrow(new_grid))
             if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, new_grid)) }
