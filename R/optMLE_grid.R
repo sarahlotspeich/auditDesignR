@@ -60,6 +60,16 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
                         min_n = min_n,
                         n_to_allocate = n_to_allocate)
 
+  if (nrow(new_grid) == 0) {
+    warning("Unable to find clear minimum. Please select a new starting value.")
+    return(list("all_opt" = NA,
+                "min_var" = 9999,
+                "min_var_design" = NA,
+                "findOptimal" = FALSE,
+                "full_grid_search" = NA,
+                "message" = "Insufficient starting grid size"))
+  }
+
   new_grid_list <- split(new_grid, seq(nrow(new_grid)))
   for (r in 1:length(new_grid_list)) {
     new_grid_list[[r]] <- as.numeric((new_grid_list[[r]][, grep(pattern = "pi", colnames(new_grid), value = TRUE)]))
