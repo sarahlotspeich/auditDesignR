@@ -111,6 +111,9 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_step
 
   #findOptimal <- findFinalOptimal <- FALSE
   for (step in 2:length(audit_steps_prop)) {
+    # Reset indicator
+    findOptimal <- FALSE
+
     # Reset audit window for this step
     step_mult <- window_mult
 
