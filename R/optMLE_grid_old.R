@@ -52,13 +52,9 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
 
   new_grid$Vbeta <- sapply(X = new_grid_list,
                            FUN = var_formula,
-                           Y_unval = Y_unval,
-                           Y_val = Y_val,
-                           X_unval = X_unval,
-                           X_val = X_val,
                            phI = phI,
                            indiv_score = indiv_score,
-                           errors_in = errors_in)
+                           sample_on = c("Ystar", "Xstar"))
 
   min_var <- min(new_grid$Vbeta)
 
@@ -130,13 +126,9 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
 
       new_grid$Vbeta <- sapply(X = new_grid_list,
                                FUN = var_formula,
-                               Y_unval = Y_unval,
-                               Y_val = Y_val,
-                               X_unval = X_unval,
-                               X_val = X_val,
                                phI = phI,
                                indiv_score = indiv_score,
-                               errors_in = errors_in)
+                               sample_on = c("Ystar", "Xstar"))
 
       # Check that a clear minimum was found
       ## And that the new minimum variance is <= the previous
@@ -184,13 +176,9 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
 
           new_grid$Vbeta <- sapply(X = new_grid_list,
                                    FUN = var_formula,
-                                   Y_unval = Y_unval,
-                                   Y_val = Y_val,
-                                   X_unval = X_unval,
-                                   X_val = X_val,
                                    phI = phI,
                                    indiv_score = indiv_score,
-                                   errors_in = errors_in)
+                                   sample_on = c("Ystar", "Xstar"))
 
           # Check that a clear minimum was found
           ## And that the new minimum variance is <= the previous
