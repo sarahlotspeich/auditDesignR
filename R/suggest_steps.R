@@ -19,5 +19,5 @@ suggest_steps <- function(phII, min_n, sample_on) {
     gcd <- max(seq(1, (gcd - 1))[gcd %% seq(1, (gcd - 1)) == 0])
   }
 
-  return(steps)
+  return(c(steps, 1))
 }
