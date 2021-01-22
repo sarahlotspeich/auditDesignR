@@ -16,13 +16,10 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
                         sample_on, indiv_score, return_full_grid = FALSE) {
 
   audit_windows <- window_mult * c(NA, audit_steps[-length(audit_steps)])
-  audit_steps_prop <- audit_steps / n_to_allocate
-
   num_strat <- 2 ^ length(sample_on)
+  n_to_allocate <- phII - num_strat * min_n
+  audit_steps_prop <- audit_steps / n_to_allocate
   if (length(sample_on) == 1) {
-    # Since each of the 2 strata must have >= min_n subjects
-    ## The number that can be optimally allocated between them is only phII - 2 x min_n
-    n_to_allocate <- phII - num_strat * min_n
     # Create a data frame to save the optimal designs from each grid search
     all_opt_des <- data.frame(grid = 1:length(audit_steps),
                               audit_steps, audit_windows,
@@ -30,9 +27,6 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
                               n0 = NA, n1 = NA, pi0 = NA, pi1 = NA,
                               Vbeta = NA, grid_size = NA)
   } else if (length(sample_on) == 2) {
-    # Since each of the 4 strata must have >= min_n subjects
-    ## The number that can be optimally allocated between them is only phII - 4 x min_n
-    n_to_allocate <- phII - num_strat * min_n
     # Create a data frame to save the optimal designs from each grid search
     all_opt_des <- data.frame(grid = 1:length(audit_steps),
                               audit_steps, audit_windows,
@@ -41,9 +35,6 @@ optMLE_grid_old <- function(phI, phII, phI_strat, min_n, window_mult = 1, audit_
                               pi00 = NA, pi01 = NA, pi10 = NA, pi11 = NA,
                               Vbeta = NA, grid_size = NA)
   } else if (length(sample_on) == 3) {
-    # Since each of the 8 strata must have >= min_n subjects
-    ## The number that can be optimally allocated between them is only phII - 8 x min_n
-    n_to_allocate <- phII - num_strat * min_n
     # Create a data frame to save the optimal designs from each grid search
     all_opt_des <- data.frame(grid = 1:length(audit_steps),
                               audit_steps, audit_windows,
