@@ -4,7 +4,7 @@
 \alias{suggest_steps}
 \title{Adaptive grid search optimization to find the optimal design (optMLE)}
 \usage{
-suggest_steps(phII, min_n, sample_on)
+suggest_steps(phII, min_n, sample_on, max_grid_size = 1e+05)
 }
 \arguments{
 \item{phII}{Phase II sample size.}
@@ -12,6 +12,8 @@ suggest_steps(phII, min_n, sample_on)
 \item{min_n}{Minimum stratum size to be sampled.}
 
 \item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.}
+
+\item{max_grid_size}{Integer maxium for the largest grids that will be searched. DEFAULT = 100000.}
 }
 \value{
 A vector of integers.
