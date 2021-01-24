@@ -15,15 +15,15 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
     if (grid_size(delta = delta, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < 1000) {
       window_lb <- rep(0, num_strat)
       window_ub <- pmin(stars, floor(unlist(phI_strat) / delta))
+      grid <- expand.grid(data.frame(mapply(":", window_lb, window_ub)))
     } else {
       return(warning("Initial grid is too large. Please increase delta and try again."))
     }
   } else {
     window_lb <- pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta
     window_ub <- pmin(prev_grid_des + prev_delta, unlist(phI_strat)) / delta
-
+    grid <- do.call(expand.grid, mapply(":", window_lb, window_ub))
   }
-  grid <- do.call(expand.grid, mapply(":", window_lb, window_ub))
   grid <- grid[rowSums(grid) == stars, ]
   grid <- grid * delta + min_n
   colnames(grid) <- gsub("N", "n", names(phI_strat))
