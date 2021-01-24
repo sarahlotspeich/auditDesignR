@@ -11,7 +11,7 @@ suggest_step(
   sample_on,
   prev_grid_des = NULL,
   prev_delta = NULL,
-  max_grid_size = 1e+05
+  max_grid_size = 500
 )
 }
 \arguments{
@@ -21,9 +21,11 @@ suggest_step(
 
 \item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.}
 
-\item{prev_grid_des}{If grid > 1, the step size from the previous iteration.}
+\item{prev_grid_des}{If grid > 1, the audit from the previous iteration that was optimal.}
 
 \item{max_grid_size}{Integer maxium for the largest grids that will be searched. DEFAULT = 100000.}
+
+\item{prev_grid_delta}{If grid > 1, the step size from the previous iteration.}
 }
 \value{
 An integer.

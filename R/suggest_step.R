@@ -4,7 +4,7 @@
 #' @param min_n Minimum stratum size to be sampled.
 #' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
-#' @param prev_grid_des If grid > 1, the step size from the previous iteration.
+#' @param prev_grid_delta If grid > 1, the step size from the previous iteration.
 #' @param max_grid_size Integer maxium for the largest grids that will be searched. DEFAULT = 100000.
 #' @return An integer.
 #' @export
