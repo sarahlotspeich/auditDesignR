@@ -8,7 +8,7 @@
 #' @param max_grid_size Integer maxium for the largest grids that will be searched. DEFAULT = 100000.
 #' @return An integer.
 #' @export
-suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = 500) {
+suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = 5000) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- 2 ^ length(sample_on)
@@ -27,7 +27,7 @@ suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL
   if (is.null(prev_grid_des)) {
     return(first_step)
   } else if (length(steps) > 1) {
-    steps <- c(first_step, steps[steps < first_step])
+    steps <- c(prev_delta, steps[steps < prev_delta])
     keep <- rep(TRUE, length(steps))
     for (i in 2:length(steps)) {
       size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
@@ -35,6 +35,10 @@ suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL
         keep[i] <- FALSE
       }
     }
-    return(min(steps[keep]))
+    if (min(steps[keep & steps < prev_delta]) == Inf) {
+      return(NA)
+    } else {
+      return(min(steps[keep]))
+    }
   }
 }
