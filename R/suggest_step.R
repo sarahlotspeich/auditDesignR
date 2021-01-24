@@ -40,7 +40,7 @@ suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL
         keep[i] <- FALSE
       }
     }
-    if (min(steps[keep & steps < prev_delta]) == Inf) {
+    if (min(steps[keep]) == Inf) {
       return(NA)
     } else {
       return(min(steps[keep]))
