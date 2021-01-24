@@ -27,8 +27,13 @@ suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL
   if (is.null(prev_grid_des)) {
     return(first_step)
   } else if (length(steps) > 1) {
-    steps <- c(prev_delta, steps[steps < prev_delta])
+    if (first_step == prev_delta) {
+      steps <- c(steps[steps < prev_delta])
+    } else {
+      steps <- c(prev_delta, steps[steps < prev_delta])
+    }
     keep <- rep(TRUE, length(steps))
+    steps <- c(first_step, steps)
     for (i in 2:length(steps)) {
       size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
       if (size > max_grid_size) {
