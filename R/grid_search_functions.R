@@ -1,37 +1,38 @@
 #' @export
-build_grid <- function(phi, delta, num_strat, phI_strat, prev_grid_des = NULL) {
+build_grid <- function(phi, delta, num_strat, phI_strat, min_n, prev_grid_des = NULL, prev_delta = NULL) {
   stars <- phi / delta
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
-    strat_max <- as.list(floor(unlist(phI_strat) / delta))
-    if (grid_size(delta = delta, phi = phi, num_strat = num_strat, prev_grid_des = prev_grid_des) < 100000) {
-      if (num_strat == 2) {
-        grid <- expand.grid(n0 = seq(0, min(stars, strat_max$N0)),
-                            n1 = seq(0, min(stars, strat_max$N1)))
-      } else if (num_strat == 4) {
-        grid <- expand.grid(n00 = seq(0, min(stars, strat_max$N00)),
-                            n01 = seq(0, min(stars, strat_max$N01)),
-                            n10 = seq(0, min(stars, strat_max$N10)),
-                            n11 = seq(0, min(stars, strat_max$N11)))
-      } else if (num_strat == 8) {
-        grid <- expand.grid(n00_0 = seq(0, min(stars, strat_max$N00_0)),
-                            n01_0 = seq(0, min(stars, strat_max$N01_0)),
-                            n10_0 = seq(0, min(stars, strat_max$N10_0)),
-                            n11_0 = seq(0, min(stars, strat_max$N11_0)),
-                            n00_1 = seq(0, min(stars, strat_max$N00_1)),
-                            n01_1 = seq(0, min(stars, strat_max$N01_1)),
-                            n10_1 = seq(0, min(stars, strat_max$N10_1)),
-                            n11_1 = seq(0, min(stars, strat_max$N11_1)))
-      }
+    if (grid_size(delta = delta, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < 1000) {
+      window_lb <- rep(0, num_strat)
+      window_ub <- pmin(stars, floor(unlist(phI_strat) / delta))
     } else {
       return(warning("Initial grid is too large. Please increase delta and try again."))
     }
   } else {
-    strat_min <- as.list(floor(unlist(phI_strat) / delta))
+    window_lb <- pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta
+    window_ub <- pmin(prev_grid_des + prev_delta, unlist(phI_strat)) / delta
+
+  }
+  grid <- expand.grid(data.frame(mapply(":", window_lb, window_ub)))
+  grid <- grid[rowSums(grid) == stars, ]
+  grid <- grid * delta + min_n
+  colnames(grid) <- gsub("N", "n", names(phI_strat))
+
+  # Augment with sampling probabilities
+  pi_grid <- matrix(nrow = nrow(grid), ncol = ncol(grid))
+  colnames(pi_grid) <- gsub("n", "pi", colnames(grid))
+
+  for (c in 1:ncol(pi_grid)) {
+    pi_grid[, c] <- grid[, c] / phI_strat[[c]]
   }
 
-  grid <- grid[rowSums(grid) == stars, ]
-  grid <- grid * delta
+  grid <- cbind(grid, pi_grid)
+
+  # grid_list <- split(grid, seq(nrow(grid)))
+  # for (r in 1:length(grid_list)) {
+  #   grid_list[[r]] <- as.numeric((grid_list[[r]][, grep(pattern = "pi", colnames(grid), value = TRUE)]))
+  # }
 
   return(grid)
 }
