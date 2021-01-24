@@ -12,7 +12,7 @@
 optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, return_full_grid = FALSE) {
   # Initial audit step size
   audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = NULL, prev_delta = NULL))
-  print(audit_steps)
+
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- 2 ^ length(sample_on)
@@ -65,7 +65,6 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
     # Initial audit step size
     audit_steps <- append(audit_steps,
                           suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)]))
-    print(audit_steps)
 
     # Run initial grid search
     grid <- build_grid(delta = audit_steps[length(audit_steps)], phi = phi, num_strat = num_strat, phI_strat = phI_strat, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps) - 1])
