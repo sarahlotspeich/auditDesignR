@@ -12,7 +12,7 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
   stars <- phi / delta
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
-    if (grid_size(delta = delta, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < 1000) {
+    if (grid_size(delta = delta, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL)) {
       window_lb <- rep(0, num_strat)
       window_ub <- pmin(stars, floor(unlist(phI_strat) / delta))
       grid <- expand.grid(data.frame(mapply(":", window_lb, window_ub)))
