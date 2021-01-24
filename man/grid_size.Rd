@@ -4,7 +4,14 @@
 \alias{grid_size}
 \title{Calculate size of the audit grid}
 \usage{
-grid_size(delta, phi, num_strat, prev_grid_des = NULL)
+grid_size(
+  delta,
+  phi,
+  num_strat,
+  phI_strat,
+  prev_grid_des = NULL,
+  prev_delta = NULL
+)
 }
 \arguments{
 \item{delta}{Audit step size (in people).}
