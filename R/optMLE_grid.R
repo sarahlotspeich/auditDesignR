@@ -94,7 +94,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
       min_var_design <- prev_min <- grid[grid$Vbeta == min_var, ]
       all_opt_des <- rbind(all_opt_des,
                            cbind(grid = 1, audit_step = NA, min_var_design, grid_size = nrow(grid)))
-      if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = step, grid)) }
+      if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = length(audit_steps), grid)) }
       if (audit_steps[length(audit_steps)] == 1) { findFinalOptimal <- TRUE }
     }
   }
