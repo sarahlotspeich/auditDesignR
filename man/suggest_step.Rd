@@ -11,7 +11,7 @@ suggest_step(
   sample_on,
   prev_grid_des = NULL,
   prev_delta = NULL,
-  max_grid_size = 5000
+  max_grid_size = 25000
 )
 }
 \arguments{

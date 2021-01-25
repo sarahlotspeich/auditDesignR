@@ -66,6 +66,15 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
     audit_steps <- append(audit_steps,
                           suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)]))
 
+    if (any(audit_steps == 9999)) {
+      return(list("all_opt" = NA,
+                  "min_var" = 9999,
+                  "min_var_design" = NA,
+                  "findOptimal" = FALSE,
+                  "full_grid_search" = NA,
+                  "message" = "No valid grids"))
+    }
+
     # Run initial grid search
     grid <- build_grid(delta = audit_steps[length(audit_steps)], phi = phi, num_strat = num_strat, phI_strat = phI_strat, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps) - 1])
     grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
