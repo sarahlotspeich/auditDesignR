@@ -13,6 +13,15 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
   # Initial audit step size
   audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = NULL, prev_delta = NULL))
 
+  if (audit_steps == 9999) {
+    return(list("all_opt" = NA,
+                "min_var" = 9999,
+                "min_var_design" = NA,
+                "findOptimal" = FALSE,
+                "full_grid_search" = NA,
+                "message" = "No valid grids"))
+  }
+
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- 2 ^ length(sample_on)
