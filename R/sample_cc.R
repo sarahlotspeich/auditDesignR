@@ -18,19 +18,19 @@ sample_cc <- function(dat, Y_unval = NULL, Y_val, X_unval = NULL, X_val, phI, ph
     cases <- phI_tab[1]
     controls <- phI_tab[2]
 
-    # Create index vectors for subjects based on (Y*, X*)
-    ind_N0. <- which(dat[, Y_unval] == 1)
-    ind_N1. <- which(dat[, Y_unval] == 0)
+    # Create index vectors for subjects based on (Y*)
+    ind_N0. <- which(dat[, Y_unval] == 0)
+    ind_N1. <- which(dat[, Y_unval] == 1)
   } else if (errors_in == "X only") {
     # Cross-tabulate Phase I data (Y*)
     phI_tab <- table(dat[, Y_val])
 
-    ind_N0. <- phI_tab[1]
-    ind_N1. <- phI_tab[2]
+    cases <- phI_tab[1]
+    controls <- phI_tab[2]
 
-    # Create index vectors for subjects based on (Y*, X*)
-    cases <- which(dat[, Y_val] == 1)
-    controls <- which(dat[, Y_val] == 0)
+    # Create index vectors for subjects based on (Y)
+    ind_N0. <- which(dat[, Y_val] == 0)
+    ind_N1. <- which(dat[, Y_val] == 1)
   }
 
   target_cases <- min(phII / 2, cases)
@@ -43,8 +43,8 @@ sample_cc <- function(dat, Y_unval = NULL, Y_val, X_unval = NULL, X_val, phI, ph
   }
 
   # Randomly sample target_controls/target_cases from ind_N0. and ind_N1., respectively
-  V_cc <- as.numeric(seq(1, phI) %in% c(sample(x = ind_N1., size = target_cases, replace = F),
-                                        sample(x = ind_N0., size = target_controls, replace = F)
-  ))
+  V_cc <- c(sample(x = ind_N1., size = target_cases, replace = F),
+            sample(x = ind_N0., size = target_controls, replace = F))
+  V_cc <- as.numeric(seq(1, phI) %in% V_cc[order(V_cc)])
   return(V_cc)
 }
