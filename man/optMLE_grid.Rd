@@ -23,7 +23,7 @@ optMLE_grid(
 
 \item{min_n}{Minimum stratum size to be sampled.}
 
-\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
 
 \item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
 

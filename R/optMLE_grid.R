@@ -4,7 +4,7 @@
 #' @param phII Phase II sample size.
 #' @param phI_strat Phase I stratum sample sizes, named list.
 #' @param min_n Minimum stratum size to be sampled.
-#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 variables can be accommodated.
+#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.
 #' @param indiv_score Matrix of score vectors for all parameters, \code{beta} and \code{eta}.
 #' @param return_full_grid If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
 #' @return List
@@ -30,8 +30,8 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
   # Create a dataframe to store all grid's optimal designs
   all_opt_des <- data.frame()
 
-  if (!(length(sample_on) %in% c(2, 4, 8))) {
-    return(warning("optMLE_grid() handles sampling on 2, 4, or 8 variables."))
+  if (!(num_strat %in% c(2, 4, 8))) {
+    return(warning("optMLE_grid() handles sampling on 2, 4, or 8 strata."))
   }
 
   # Run initial grid search
