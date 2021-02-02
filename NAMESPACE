@@ -2,6 +2,7 @@
 
 export(build_grid)
 export(calc_pi_vec)
+export(grid_size)
 export(info)
 export(od_loglik)
 export(optMLE_grid)

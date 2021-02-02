@@ -7,6 +7,7 @@
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @return An integer.
+#' @export
 grid_size <- function(delta, phi, num_strat, phI_strat, prev_grid_des = NULL, prev_delta = NULL) {
   # Stars and bars
   stars <- phi / delta
