@@ -6,7 +6,7 @@
 #' @param wave1_Validated (For use with multi-wave designs.) Columns with the validation indicator (can be name or numeric index) from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_optMLE <- function(dat, des, errors_in = "Both", wave1_Validated = NULL) {
+sample_optMLE <- function(dat, sample_on, des, wave1_Validated = NULL) {
   phI <- nrow(dat)
 
   # Cross-tabulate Phase I data (sample_on)

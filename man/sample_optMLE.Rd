@@ -4,16 +4,16 @@
 \alias{sample_optMLE}
 \title{Sample optimal MLE (optMLE) audit based on Phase I variables.}
 \usage{
-sample_optMLE(dat, des, errors_in = "Both", wave1_Validated = NULL)
+sample_optMLE(dat, sample_on, des, wave1_Validated = NULL)
 }
 \arguments{
 \item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
 
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
+
 \item{des}{Dataframe containing the stratum sample sizes.}
 
 \item{wave1_Validated}{(For use with multi-wave designs.) Columns with the validation indicator (can be name or numeric index) from first wave of audits.}
-
-\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
