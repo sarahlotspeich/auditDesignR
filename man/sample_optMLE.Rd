@@ -4,36 +4,16 @@
 \alias{sample_optMLE}
 \title{Sample optimal MLE (optMLE) audit based on Phase I variables.}
 \usage{
-sample_optMLE(
-  dat,
-  Y_unval = NULL,
-  Y_val,
-  X_unval = NULL,
-  X_val,
-  phI,
-  des,
-  errors_in = "Both",
-  wave1_Validated = NULL
-)
+sample_optMLE(dat, des, errors_in = "Both", wave1_Validated = NULL)
 }
 \arguments{
-\item{dat}{Dataframe or matrix containing columns \code{Y_unval}, \code{Y_val}, \code{X_unval}, \code{X_val}.}
+\item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
 
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "X only"}.)}
-
-\item{Y_val}{Column with the validated outcome (can be name or numeric index).}
-
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "Y only"}.)}
-
-\item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
-
-\item{phI}{Phase I sample size.}
-
-\item{des}{Dataframe containing the 4 stratum sample sizes.}
-
-\item{errors_in}{Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.}
+\item{des}{Dataframe containing the stratum sample sizes.}
 
 \item{wave1_Validated}{(For use with multi-wave designs.) Columns with the validation indicator (can be name or numeric index) from first wave of audits.}
+
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
