@@ -4,16 +4,7 @@
 \alias{sample_bcc}
 \title{Sample unvalidated balanced case-control (BCC*) audit based on Phase I variables.}
 \usage{
-sample_bcc(
-  dat,
-  Y_unval = NULL,
-  Y_val,
-  X_unval = NULL,
-  X_val,
-  phI,
-  phII,
-  sample_on
-)
+sample_bcc(dat, phI, phII, sample_on)
 }
 \arguments{
 \item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
