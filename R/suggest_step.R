@@ -41,8 +41,24 @@ suggest_step <- function(phII, phI_strat, min_n, sample_on, prev_grid_des = NULL
         keep[i] <- FALSE
       }
     }
-    if (mean(keep) == 0) {
-      return(9999)
+    # If no factors will work, consider all numbers smaller (if previous was small enough)
+    if (mean(keep) == 0 & prev_delta <= 10) {
+      smaller_steps <- seq(1, (prev_delta - 1))
+      keep <- rep(TRUE, length(smaller_steps))
+      for (i in 1:length(smaller_steps)) {
+        size <- grid_size(delta = smaller_steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
+        if (size > max_grid_size) {
+          keep[i] <- FALSE
+        }
+      }
+
+      # Still can't find one
+      if (mean(keep) == 0) {
+        return(9999)
+      } else {
+        return(min(smaller_steps[keep]))
+      }
+
     } else {
       return(min(steps[keep]))
     }

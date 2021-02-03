@@ -40,14 +40,18 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
   min_var <- min(grid$Vbeta)
 
   if (is.na(min_var)) {
-    return(list("all_opt" = NA,
+    all_opt_des$grid <- 1:nrow(all_opt_des)
+    all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
+    return(list("all_opt" = all_opt_des,
                 "min_var" = 9999,
                 "min_var_design" = NA,
                 "findOptimal" = FALSE,
                 "full_grid_search" = NA,
                 "message" = "Singular information"))
   } else if (sum(grid$Vbeta == min_var) > 1) {
-    return(list("all_opt" = NA,
+    all_opt_des$grid <- 1:nrow(all_opt_des)
+    all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
+    return(list("all_opt" = all_opt_des,
                 "min_var" = 9999,
                 "min_var_design" = NA,
                 "findOptimal" = FALSE,
@@ -76,7 +80,9 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
                           suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)]))
 
     if (any(audit_steps == 9999)) {
-      return(list("all_opt" = NA,
+      all_opt_des$grid <- 1:nrow(all_opt_des)
+      all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
+      return(list("all_opt" = all_opt_des,
                   "min_var" = 9999,
                   "min_var_design" = NA,
                   "findOptimal" = FALSE,
@@ -90,14 +96,18 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
     min_var <- min(grid$Vbeta)
 
     if (is.na(min_var)) {
-      return(list("all_opt" = NA,
+      all_opt_des$grid <- 1:nrow(all_opt_des)
+      all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
+      return(list("all_opt" = all_opt_des,
                   "min_var" = 9999,
                   "min_var_design" = NA,
                   "findOptimal" = FALSE,
                   "full_grid_search" = NA,
                   "message" = "Singular information"))
     } else if (sum(grid$Vbeta == min_var) > 1) {
-      return(list("all_opt" = NA,
+      all_opt_des$grid <- 1:nrow(all_opt_des)
+      all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
+      return(list("all_opt" = all_opt_des,
                   "min_var" = 9999,
                   "min_var_design" = NA,
                   "findOptimal" = FALSE,
