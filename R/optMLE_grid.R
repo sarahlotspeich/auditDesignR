@@ -67,6 +67,11 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
   # Create dataframe to store all designs
   if (return_full_grid) { all_grids <- cbind(grid = 1, grid) }
 
+  # If first grid is at 1-person scale, check for optimal
+  if (audit_steps[length(audit_steps)] == 1 & sum(grid$Vbeta == min_var) == 1) {
+    findFinalOptimal <- TRUE
+  }
+
   # Keep choosing new steps until get to 1-person scale
   while (audit_steps[length(audit_steps)] > 1) {
     # Reset indicators
