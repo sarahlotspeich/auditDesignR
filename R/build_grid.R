@@ -22,7 +22,7 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
 
   # include previous if not included
   if (!is.null(prev_grid_des)) {
-    grid <- rbind(grid, prev_grid_des / delta)
+    grid <- unique(rbind(grid, prev_grid_des / delta))
   }
 
   grid <- grid[rowSums(grid) == stars, ]
