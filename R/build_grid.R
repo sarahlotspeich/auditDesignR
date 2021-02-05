@@ -19,6 +19,12 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
     window_ub <- ceiling(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - min_n)) / delta)
   }
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
+
+  # include previous if not included
+  if (!is.null(prev_grid_des)) {
+    grid <- rbind(grid, prev_grid_des / delta)
+  }
+
   grid <- grid[rowSums(grid) == stars, ]
   grid <- grid * delta + min_n
   colnames(grid) <- gsub("N", "n", names(phI_strat))
