@@ -40,17 +40,13 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
   min_var <- min(grid$Vbeta)
 
   if (is.na(min_var)) {
-    all_opt_des$grid <- 1:nrow(all_opt_des)
-    all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
-    return(list("all_opt" = all_opt_des,
+    return(list("all_opt" = NA,
                 "min_var" = 9999,
                 "min_var_design" = NA,
                 "findOptimal" = FALSE,
                 "full_grid_search" = NA,
                 "message" = "Singular information"))
   } else if (sum(grid$Vbeta == min_var) > 1) {
-    all_opt_des$grid <- 1:nrow(all_opt_des)
-    all_opt_des$audit_step <- audit_steps[-length(audit_steps)]
     return(list("all_opt" = all_opt_des,
                 "min_var" = 9999,
                 "min_var_design" = NA,
