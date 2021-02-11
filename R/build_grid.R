@@ -10,13 +10,14 @@
 #' @export
 build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = NULL, prev_delta = NULL) {
   stars <- phi / delta
+
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
     window_lb <- rep(0, num_strat)
-    window_ub <- pmin(stars, floor((unlist(phI_strat) - min_n) / delta))
+    window_ub <- pmin(stars, floor((unlist(phI_strat) / delta)))
   } else {
     window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
-    window_ub <- ceiling(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - min_n)) / delta)
+    window_ub <- ceiling(pmin(prev_grid_des + prev_delta, unlist(phI_strat)) / delta)
   }
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
 
