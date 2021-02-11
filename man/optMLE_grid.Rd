@@ -11,7 +11,8 @@ optMLE_grid(
   min_n,
   sample_on,
   indiv_score,
-  return_full_grid = FALSE
+  return_full_grid = FALSE,
+  max_grid_size = 10000
 )
 }
 \arguments{

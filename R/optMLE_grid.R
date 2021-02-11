@@ -9,9 +9,9 @@
 #' @param return_full_grid If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
 #' @return List
 #' @export
-optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, return_full_grid = FALSE) {
+optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, return_full_grid = FALSE, max_grid_size = 10000) {
   # Initial audit step size
-  audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = NULL, prev_delta = NULL))
+  audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size))
 
   if (audit_steps == 9999) {
     return(list("all_opt" = NA,
@@ -78,7 +78,7 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
 
     # Initial audit step size
     audit_steps <- append(audit_steps,
-                          suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)]))
+                          suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
 
     if (any(audit_steps == 9999)) {
       all_opt_des$grid <- 1:nrow(all_opt_des)
