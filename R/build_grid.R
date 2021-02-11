@@ -14,10 +14,10 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
     window_lb <- rep(0, num_strat)
-    window_ub <- pmin(stars, floor((unlist(phI_strat) / delta)))
+    window_ub <- pmin(stars, floor((unlist(phI_strat) - pmin(unlist(phI_strat), min_n)) / delta))
   } else {
     window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
-    window_ub <- ceiling(pmin(prev_grid_des + prev_delta, unlist(phI_strat)) / delta)
+    window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
   }
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
 
@@ -27,7 +27,7 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
   }
 
   grid <- grid[rowSums(grid) == stars, ]
-  grid <- grid * delta + min_n
+  grid <- grid * delta + matrix(data = pmin(unlist(phI_strat), min_n), nrow = nrow(grid), ncol = ncol(grid), byrow = TRUE)
   colnames(grid) <- gsub("N", "n", names(phI_strat))
 
   # Augment with sampling probabilities

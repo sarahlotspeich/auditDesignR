@@ -26,12 +26,19 @@ optMLE_grid(
 
 \item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
 
-\item{indiv_score}{Matrix of score vectors for all parameters, \code{beta} and \code{eta}.}
+\item{indiv_score}{Matrix of score vectors for all parameters.}
 
 \item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
+
+\item{max_grid_size}{Integer maxium for the largest grids that will be searched.}
 }
 \value{
-List
+\item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
+\item{min_var}{Value of the variance achieved by the optimal design in the last iteration.}
+\item{min_var_design}{Optimal design in the last iteration.}
+\item{findOptimal}{\code{TRUE}/\code{FALSE} for whether final iteration found an optimal design.}
+\item{full_grid_search}{If \code{return_full_grid} = TRUE, a dataframe containing all grids from ann iterations.}
+\item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 }
 \description{
 Adaptive grid search optimization to find the optimal design (optMLE)

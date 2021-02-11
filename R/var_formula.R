@@ -20,8 +20,8 @@ var_formula <- function(pi_vec = NULL, phI, indiv_score, sample_on) {
     pi_probs <- data.frame(Var1 = c(0, 0, 1, 1, 0, 0, 1, 1),
                            Var2 = c(0, 1, 0, 1, 0, 1, 0, 1),
                            Var3 = c(0, 0, 0, 0, 1, 1, 1, 1),
-                           pV1 = c(pi_vec[1], pi_vec[2], pi_vec[3], pi_vec[4],
-                                   pi_vec[5], pi_vec[6], pi_vec[7], pi_vec[8]))
+                           pV1 = unlist(c(pi_vec[1], pi_vec[2], pi_vec[3], pi_vec[4],
+                                          pi_vec[5], pi_vec[6], pi_vec[7], pi_vec[8])))
     colnames(pi_probs)[1:3] <- sample_on
   } else {
     return(warning("You are attempting to sample on too many variables."))
