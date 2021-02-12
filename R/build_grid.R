@@ -4,11 +4,13 @@
 #' @param phi Number of people to be allocated: \code{phi = phII - num_strat * min_n}.
 #' @param num_strat Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.
 #' @param phI_strat Phase I stratum sample sizes, named list.
+#' @param closed For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.
+#' @param closed_at For multi-wave designs, a vector of already sampled sizes for strata that are "closed" (must be the same length as \code{closed}). Default is \code{NULL}.
 #' @param min_n Minimum stratum size to be sampled.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @export
-build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = NULL, prev_delta = NULL) {
+build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_n, prev_grid_des = NULL, prev_delta = NULL) {
   stars <- phi / delta
 
   # First grid tries entire space
@@ -19,6 +21,13 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
     window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
     window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
   }
+
+  # If strata have been closed, force lb/ub to both be value from closed_at (already sampled)
+  if (length(closed) > 0) {
+    window_lb[names(phI_strat) ==  toupper(closed)] <-
+      window_ub[names(phI_strat) ==  toupper(closed)] <- unlist(closed_at) / delta
+  }
+
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
 
   # include previous if not included
@@ -26,8 +35,22 @@ build_grid <- function(delta, phi, num_strat, phI_strat, min_n, prev_grid_des = 
     grid <- unique(rbind(grid, prev_grid_des / delta))
   }
 
+  # filter to grids that sum to audit constraint
   grid <- grid[rowSums(grid) == stars, ]
-  grid <- grid * delta + matrix(data = pmin(unlist(phI_strat), min_n), nrow = nrow(grid), ncol = ncol(grid), byrow = TRUE)
+
+  # scale back to people
+  grid <- grid * delta
+
+  # if strata were closed, don't add min_n to them (just open strata)
+  if (length(closed) > 0) {
+    grid[, which(names(phI_strat) !=  toupper(closed))] <-
+      grid[, which(names(phI_strat) !=  toupper(closed))] +
+      matrix(data = pmin(unlist(phI_strat), min_n)[which(names(phI_strat) !=  toupper(closed))],
+             nrow = nrow(grid), ncol = length(which(names(phI_strat) !=  toupper(closed))), byrow = TRUE)
+  } else {
+    grid <- grid +
+      matrix(data = pmin(unlist(phI_strat), min_n), nrow = nrow(grid), ncol = ncol(grid), byrow = TRUE)
+  }
   colnames(grid) <- gsub("N", "n", names(phI_strat))
 
   # Augment with sampling probabilities
