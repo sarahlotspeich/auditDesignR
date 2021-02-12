@@ -16,7 +16,7 @@
 #' \item{min_var_design}{Optimal design in the last iteration.}
 #' \item{findOptimal}{\code{TRUE}/\code{FALSE} for whether final iteration found an optimal design.}
 #' \item{full_grid_search}{If \code{return_full_grid} = TRUE, a dataframe containing all grids from ann iterations.}
-#' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
+#' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information"}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 #' @export
 optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = NULL, closed_at = NULL, indiv_score, return_full_grid = FALSE, max_grid_size = 10000) {
   # Initial audit step size
