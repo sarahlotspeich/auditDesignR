@@ -13,6 +13,9 @@
 build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_n, prev_grid_des = NULL, prev_delta = NULL) {
   stars <- phi / delta
 
+  # Exclude closed strata
+  phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
+
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
     window_lb <- rep(0, num_strat)
@@ -23,10 +26,10 @@ build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_
   }
 
   # If strata have been closed, force lb/ub to both be value from closed_at (already sampled)
-  if (length(closed) > 0) {
-    window_lb[names(phI_strat) ==  toupper(closed)] <-
-      window_ub[names(phI_strat) ==  toupper(closed)] <- unlist(closed_at) / delta
-  }
+  # if (length(closed) > 0) {
+  #   window_lb[names(phI_strat) ==  toupper(closed)] <-
+  #     window_ub[names(phI_strat) ==  toupper(closed)] <- unlist(closed_at) / delta
+  # }
 
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
 
@@ -41,16 +44,9 @@ build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_
   # scale back to people
   grid <- grid * delta
 
-  # if strata were closed, don't add min_n to them (just open strata)
-  if (length(closed) > 0) {
-    grid[, which(names(phI_strat) !=  toupper(closed))] <-
-      grid[, which(names(phI_strat) !=  toupper(closed))] +
-      matrix(data = pmin(unlist(phI_strat), min_n)[which(names(phI_strat) !=  toupper(closed))],
-             nrow = nrow(grid), ncol = length(which(names(phI_strat) !=  toupper(closed))), byrow = TRUE)
-  } else {
-    grid <- grid +
-      matrix(data = pmin(unlist(phI_strat), min_n), nrow = nrow(grid), ncol = ncol(grid), byrow = TRUE)
-  }
+  # add back min_n to each stratum
+  grid <- grid +
+    matrix(data = pmin(unlist(phI_strat), min_n), nrow = nrow(grid), ncol = ncol(grid), byrow = TRUE)
   colnames(grid) <- gsub("N", "n", names(phI_strat))
 
   # Augment with sampling probabilities

@@ -19,8 +19,15 @@
 #' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information"}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 #' @export
 optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = NULL, closed_at = NULL, indiv_score, return_full_grid = FALSE, max_grid_size = 10000) {
+  # If strata have been closed, subtract the amount sampled from the closed strata from phII
+  if (length(closed_at) > 0) {
+    phII <- phII - sum(closed_at)
+  }
+  # And, if applicable, subtract them from the number of strata
+  num_strat <- 2 ^ length(sample_on) - length(closed)
+
   # Initial audit step size
-  audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, closed = closed, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size))
+  audit_steps <- suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size)
 
   if (audit_steps == 9999) {
     return(list("all_opt" = NA,
@@ -33,8 +40,7 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
 
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
-  num_strat <- 2 ^ length(sample_on) #- length(closed)
-  phi <- phII - (num_strat - length(closed)) * min_n
+  phi <- phII - (num_strat * min_n)
 
   # Create a dataframe to store all grid's optimal designs
   all_opt_des <- data.frame()
@@ -88,7 +94,7 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
 
     # Initial audit step size
     audit_steps <- append(audit_steps,
-                          suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, closed = closed, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
+                          suggest_step(phII = (phII - sum(closed_at)), phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, closed = closed, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
 
     if (any(audit_steps == 9999)) {
       all_opt_des$grid <- 1:nrow(all_opt_des)
