@@ -51,6 +51,14 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
 
   # Run initial grid search
   grid <- build_grid(delta = audit_steps, phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, closed_at = closed_at, min_n = min_n, prev_grid_des = NULL, prev_delta = NULL)
+
+  # If strata were closed, append them to the grid
+  if (length(closed) > 0) {
+    closed_at_pi <- closed_at / phI_strat[toupper(names(closed_at))]
+    colnames(closed_at_pi) <- gsub("n", "pi", colnames(closed_at_pi))
+    grid <- cbind(closed_at, closed_at_pi, grid)
+    grid <- grid[, colnames(grid)[order(colnames(grid))]]
+  }
   grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
   min_var <- min(grid$Vbeta)
 
@@ -87,14 +95,17 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
   # Keep choosing new steps until get to 1-person scale
   while (audit_steps[length(audit_steps)] > 1 & !findFinalOptimal) {
     # Reset indicators
-    findOptimal <- findFinalOptimal <- FALSE
+    findOptimal <- FALSE
 
     # To choose min/max for next grid, use previous grid's "optimal" design
-    prev_grid_des <- prev_min[, 1:num_strat] - min_n
+    prev_grid_des <- prev_min[, grep(pattern = "n", x = colnames(prev_min))] - min_n
+    if (length(closed) > 0) {
+      prev_grid_des <- prev_grid_des[, setdiff(colnames(prev_grid_des), closed)]
+    }
 
     # Initial audit step size
     audit_steps <- append(audit_steps,
-                          suggest_step(phII = (phII - sum(closed_at)), phI_strat = phI_strat, min_n = min_n, sample_on = sample_on, closed = closed, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
+                          suggest_step(phII = phII, phI_strat = phI_strat, num_strat = num_strat, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
 
     if (any(audit_steps == 9999)) {
       all_opt_des$grid <- 1:nrow(all_opt_des)
@@ -107,8 +118,16 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
                   "message" = "No valid grids"))
     }
 
+    # Run next grid search
+
     # Run initial grid search
     grid <- build_grid(delta = audit_steps[length(audit_steps)], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, closed_at = closed_at, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps) - 1])
+
+    # If strata were closed, append them to the grid
+    if (length(closed) > 0) {
+      grid <- cbind(closed_at, closed_at_pi, grid)
+      grid <- grid[, colnames(grid)[order(colnames(grid))]]
+    }
     grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
     min_var <- min(grid$Vbeta)
 
