@@ -3,12 +3,13 @@
 #' @param phII Phase II sample size.
 #' @param min_n Minimum stratum size to be sampled.
 #' @param num_strat Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.
+#' @param closed For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_grid_delta If grid > 1, the step size from the previous iteration.
 #' @param max_grid_size Integer maxium for the largest grids that will be searched.
 #' @return An integer.
 #' @export
-suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_delta, max_grid_size) {
+suggest_step <- function(phII, phI_strat, min_n, num_strat, closed, prev_grid_des, prev_delta, max_grid_size) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   phi <- phII - num_strat * min_n

@@ -9,6 +9,7 @@ suggest_step(
   phI_strat,
   min_n,
   num_strat,
+  closed,
   prev_grid_des,
   prev_delta,
   max_grid_size
@@ -20,6 +21,8 @@ suggest_step(
 \item{min_n}{Minimum stratum size to be sampled.}
 
 \item{num_strat}{Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.}
+
+\item{closed}{For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.}
 
 \item{prev_grid_des}{If grid > 1, the audit from the previous iteration that was optimal.}
 
