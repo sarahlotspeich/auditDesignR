@@ -27,7 +27,7 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
   num_strat <- 2 ^ length(sample_on) - length(closed)
 
   # Initial audit step size
-  audit_steps <- suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size)
+  audit_steps <- suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, closed = closed, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size)
 
   if (audit_steps == 9999) {
     return(list("all_opt" = NA,
@@ -105,7 +105,7 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
 
     # Initial audit step size
     audit_steps <- append(audit_steps,
-                          suggest_step(phII = phII, phI_strat = phI_strat, num_strat = num_strat, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
+                          suggest_step(phII = phII, phI_strat = phI_strat, num_strat = num_strat, closed = closed, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
 
     if (any(audit_steps == 9999)) {
       all_opt_des$grid <- 1:nrow(all_opt_des)
