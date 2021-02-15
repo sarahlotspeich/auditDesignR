@@ -14,7 +14,9 @@ build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_
   stars <- phi / delta
 
   # Exclude closed strata
-  phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
+  if (length(closed) > 0) {
+    phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
+  }
 
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
