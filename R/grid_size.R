@@ -15,7 +15,9 @@ grid_size <- function(delta, phi, num_strat, phI_strat, closed, prev_grid_des = 
   bars <- num_strat - 1
 
   # Exclude closed strata
-  phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
+  if (length(closed) > 0) {
+    phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
+  }
 
   if (is.null(prev_grid_des)) {
     return(choose(n = (stars + bars), k = (bars)))
