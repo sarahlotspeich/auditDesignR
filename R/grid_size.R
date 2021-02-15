@@ -9,7 +9,7 @@
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @return An integer.
 #' @export
-grid_size <- function(delta, phi, num_strat, phI_strat, prev_grid_des = NULL, prev_delta = NULL) {
+grid_size <- function(delta, phi, num_strat, phI_strat, closed, prev_grid_des = NULL, prev_delta = NULL) {
   # Stars and bars
   stars <- phi / delta
   bars <- num_strat - 1
