@@ -11,7 +11,6 @@
 suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_delta, max_grid_size) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
-  # num_strat <- 2 ^ length(sample_on) #- length(closed)
   phi <- phII - num_strat * min_n
 
   # Suggest audit steps that are factors of each other to ensure valid grids
