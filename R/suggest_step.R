@@ -21,7 +21,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_
     gcd <- max(seq(1, (gcd - 1))[gcd %% seq(1, (gcd - 1)) == 0])
   }
   steps <- c(steps, 1)
-  first_step <- min(steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size])
+  first_step <- min(steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size])
 
   if (is.null(prev_grid_des)) {
     return(first_step)
@@ -35,7 +35,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_
     keep <- rep(TRUE, length(steps))
     keep[steps >= prev_delta] <- FALSE
     for (i in 2:length(steps)) {
-      size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
+      size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
       if (size > max_grid_size) {
         keep[i] <- FALSE
       }
@@ -45,7 +45,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_
       smaller_steps <- seq(1, (prev_delta - 1))
       keep <- rep(TRUE, length(smaller_steps))
       for (i in 1:length(smaller_steps)) {
-        size <- grid_size(delta = smaller_steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
+        size <- grid_size(delta = smaller_steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
         if (size > max_grid_size) {
           keep[i] <- FALSE
         }
