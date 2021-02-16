@@ -92,8 +92,11 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
     findFinalOptimal <- TRUE
   }
 
+  t <- 1
   # Keep choosing new steps until get to 1-person scale
   while (audit_steps[length(audit_steps)] > 1 & !findFinalOptimal) {
+    t <- t + 1 # Grid search iteration number
+
     # Reset indicators
     findOptimal <- FALSE
 
@@ -157,7 +160,7 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
       min_var_design <- prev_min <- grid[grid$Vbeta == min_var, ]
       all_opt_des <- rbind(all_opt_des,
                            cbind(grid = 1, audit_step = NA, min_var_design, grid_size = nrow(grid)))
-      if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = NA, grid)) }
+      if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = t, grid)) }
       if (audit_steps[length(audit_steps)] == 1) { findFinalOptimal <- TRUE }
     }
   }
