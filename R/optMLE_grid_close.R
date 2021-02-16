@@ -26,6 +26,9 @@ optMLE_grid_close <- function(phI, phII, phI_strat, min_n, sample_on, closed = N
   # And, if applicable, subtract them from the number of strata
   num_strat <- 2 ^ length(sample_on) - length(closed)
 
+  #rep_min_n <- pmin(rep(min_n, num_strat), unlist(phI_strat))
+
+
   # Initial audit step size
   audit_steps <- suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, closed = closed, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size)
 
