@@ -17,6 +17,11 @@
 #' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information"}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 #' @export
 optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, return_full_grid = FALSE, max_grid_size = 10000) {
+  # Since each of the strata must have >= min_n subjects
+  ## The number that can be optimally allocated between them is only phII - num_strat x min_n
+  num_strat <- 2 ^ length(sample_on)
+  phi <- phII - num_strat * min_n
+
   # Initial audit step size
   audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size))
 
@@ -28,11 +33,6 @@ optMLE_grid <- function(phI, phII, phI_strat, min_n, sample_on, indiv_score, ret
                 "full_grid_search" = NA,
                 "message" = "No valid grids"))
   }
-
-  # Since each of the strata must have >= min_n subjects
-  ## The number that can be optimally allocated between them is only phII - num_strat x min_n
-  num_strat <- 2 ^ length(sample_on)
-  phi <- phII - num_strat * min_n
 
   # Create a dataframe to store all grid's optimal designs
   all_opt_des <- data.frame()
