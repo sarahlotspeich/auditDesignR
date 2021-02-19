@@ -84,6 +84,14 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     # To choose min/max for next grid, use previous grid's "optimal" design
     prev_grid_des <- prev_min[, 1:num_strat] - min_n
 
+    # If multi-wave design, and not initial grid
+    ## subtract the stratum sample sizes from Phase II(a) from min_var_design
+    if (!is.null(phIIa_strat)) {
+      for (c in colnames(prev_grid_des)) {
+        prev_grid_des[, c] <- prev_grid_des[, c] - as.numeric(phIIa_strat[c])
+      }
+    }
+
     # Initial audit step size
     audit_steps <- append(audit_steps,
                           suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = prev_grid_des, prev_delta = audit_steps[length(audit_steps)], max_grid_size = max_grid_size))
