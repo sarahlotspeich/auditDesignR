@@ -10,6 +10,7 @@ build_grid(
   phi,
   num_strat,
   phI_strat,
+  phIIa_strat = NULL,
   closed = NULL,
   closed_at = NULL,
   min_n,
@@ -35,6 +36,8 @@ grid_size(
 \item{num_strat}{Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.}
 
 \item{phI_strat}{Phase I stratum sample sizes, named list.}
+
+\item{phIIa_strat}{For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector. Default is \code{NULL}.}
 
 \item{closed}{For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.}
 
