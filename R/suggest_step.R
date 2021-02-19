@@ -9,7 +9,7 @@
 #' @param max_grid_size Integer maxium for the largest grids that will be searched.
 #' @return An integer.
 #' @export
-suggest_step <- function(phII, phI_strat, min_n, num_strat, closed, prev_grid_des, prev_delta, max_grid_size) {
+suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_grid_des, prev_delta, max_grid_size) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   phi <- phII - num_strat * min_n

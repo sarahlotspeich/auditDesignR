@@ -9,7 +9,7 @@ suggest_step(
   phI_strat,
   min_n,
   num_strat,
-  closed,
+  closed = NULL,
   prev_grid_des,
   prev_delta,
   max_grid_size

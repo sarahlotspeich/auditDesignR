@@ -22,7 +22,7 @@ grid_size(
   phi,
   num_strat,
   phI_strat,
-  closed,
+  closed = NULL,
   prev_grid_des = NULL,
   prev_delta = NULL
 )
