@@ -10,8 +10,8 @@ build_grid(
   phi,
   num_strat,
   phI_strat,
-  closed,
-  closed_at,
+  closed = NULL,
+  closed_at = NULL,
   min_n,
   prev_grid_des = NULL,
   prev_delta = NULL

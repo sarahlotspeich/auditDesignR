@@ -10,7 +10,7 @@
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @export
-build_grid <- function(delta, phi, num_strat, phI_strat, closed, closed_at, min_n, prev_grid_des = NULL, prev_delta = NULL) {
+build_grid <- function(delta, phi, num_strat, phI_strat, closed = NULL, closed_at = NULL, min_n, prev_grid_des = NULL, prev_delta = NULL) {
   stars <- phi / delta
 
   # Exclude closed strata
