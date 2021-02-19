@@ -8,6 +8,7 @@ optMLE_grid(
   phI,
   phII,
   phI_strat,
+  phIIa_strat = NULL,
   min_n,
   sample_on,
   indiv_score,
@@ -20,7 +21,9 @@ optMLE_grid(
 
 \item{phII}{Phase II sample size.}
 
-\item{phI_strat}{Phase I stratum sample sizes, named list.}
+\item{phI_strat}{Phase I stratum sample sizes as a named list, dataframe, or vector}
+
+\item{phIIa_strat}{For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector Default is \code{NULL}.}
 
 \item{min_n}{Minimum stratum size to be sampled.}
 
