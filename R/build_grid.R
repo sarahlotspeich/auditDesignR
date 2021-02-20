@@ -19,13 +19,31 @@ build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, clo
     phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
   }
 
+  # If Phase II(a) strata were provided, these need to be substracted from phI_strat
+  ## Since they are no longer available for audit in Phase II(b)
+  if (!is.null(phIIa_strat)) {
+    phI_strat_rem <- phI_strat
+    for (s in names(phI_strat_rem)) {
+      phI_strat_rem[s] <- phI_strat_rem[s] - phIIa_strat[tolower(s)]
+    }
+  }
+
   # First grid tries entire space
   if (is.null(prev_grid_des)) {
     window_lb <- rep(0, num_strat)
-    window_ub <- pmin(stars, floor((unlist(phI_strat) - pmin(unlist(phI_strat), min_n)) / delta))
+    if (!is.null(phIIa_strat)) {
+      window_ub <- pmin(stars, floor((unlist(phI_strat_rem) - pmin(unlist(phI_strat_rem), min_n)) / delta))
+    } else {
+      window_ub <- pmin(stars, floor((unlist(phI_strat) - pmin(unlist(phI_strat), min_n)) / delta))
+    }
   } else {
-    window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
-    window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
+    if (!is.null(phIIa_strat)) {
+      window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
+      window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat_rem) - pmin(unlist(phI_strat_rem), min_n))) / delta)
+    } else {
+      window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
+      window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
+    }
   }
 
   grid <- do.call(expand.grid, grid_vals(x = window_lb, y = window_ub))
@@ -51,6 +69,11 @@ build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, clo
     for (c in colnames(grid)) {
       grid[, c] <- grid[, c] + as.numeric(phIIa_strat[c])
     }
+  }
+
+  # Check for grids where n > N (truncate at N)
+  for (c in 1:ncol(grid)) {
+    grid[, c]
   }
 
   # Augment with sampling probabilities
