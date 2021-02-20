@@ -162,6 +162,7 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
       if (return_full_grid) { all_grids <- rbind(all_grids, cbind(grid = NA, grid)) }
       if (audit_steps[length(audit_steps)] == 1) { findFinalOptimal <- TRUE }
     }
+    keepSearching <- ifelse(is.null(steps), audit_steps[it] > 1, it < length(audit_steps))
   }
 
   all_opt_des$grid <- 1:nrow(all_opt_des)
