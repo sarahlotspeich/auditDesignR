@@ -37,7 +37,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_
     keep[steps >= prev_delta] <- FALSE
     for (i in 2:length(steps)) {
       size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
-      if (size > max_grid_size) {
+      if (size > max_grid_size | size <= 1) {
         keep[i] <- FALSE
       }
     }
