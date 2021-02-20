@@ -11,6 +11,7 @@ optMLE_grid(
   phIIa_strat = NULL,
   min_n,
   sample_on,
+  steps = NULL,
   indiv_score,
   return_full_grid = FALSE,
   max_grid_size = 10000
@@ -28,6 +29,8 @@ optMLE_grid(
 \item{min_n}{Minimum stratum size to be sampled.}
 
 \item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
+
+\item{steps}{(Optional) Vector of step sizes for the grid search. Default is \code{NULL}, in which case the internal \code{suggest_step} function is used to choose grid scale.}
 
 \item{indiv_score}{Matrix of score vectors for all parameters.}
 
