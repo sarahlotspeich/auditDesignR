@@ -154,6 +154,9 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     }
 
     findOptimal <- sum(grid$Vbeta == min_var) == 1 & (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) < 1E-8
+    if (sum(grid$Vbeta == min_var) == 1 &
+        (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) > 1E-8 &
+        rowSums(min_var_design) > phII) { findOptimal <- TRUE }
 
     if (findOptimal) {
       min_var_design <- prev_min <- grid[grid$Vbeta == min_var, ]
@@ -165,7 +168,10 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     keepSearching <- ifelse(is.null(steps), audit_steps[it] > 1, it < length(audit_steps))
   }
 
-  all_opt_des$grid <- 1:nrow(all_opt_des)
+  if (findFinalOptimal) {
+    all_opt_des$grid <- 1:nrow(all_opt_des)
+  }
+
   all_opt_des$audit_step <- audit_steps
 
   if (!findFinalOptimal) { min_var_design[1, ] <- NA }
