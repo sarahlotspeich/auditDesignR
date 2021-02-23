@@ -12,7 +12,7 @@
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @export
 build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, closed = NULL, closed_at = NULL, min_n, prev_grid_des = NULL, prev_delta = NULL) {
-  stars <- phi / delta
+  stars <- round(phi / delta)
 
   # Exclude closed strata
   if (length(closed) > 0) {
