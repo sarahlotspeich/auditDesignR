@@ -98,7 +98,7 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     findOptimal <- findFinalOptimal <- FALSE
 
     # To choose min/max for next grid, use previous grid's "optimal" design
-    prev_grid_des <- prev_min[, 1:num_strat] - min_n
+    prev_grid_des <- prev_min[, 1:num_strat] - unlist(pmin(phI_strat, min_n))
 
     # If multi-wave design, and not initial grid
     ## subtract the stratum sample sizes from Phase II(a) from min_var_design
