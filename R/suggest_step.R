@@ -2,14 +2,13 @@
 #' @name suggest_step
 #' @param phII Phase II sample size.
 #' @param min_n Minimum stratum size to be sampled.
-#' @param num_strat Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.
-#' @param closed For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.
+#' @param num_strat Number of strata on which sampling is based.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_grid_delta If grid > 1, the step size from the previous iteration.
 #' @param max_grid_size Integer maxium for the largest grids that will be searched.
 #' @return An integer.
 #' @export
-suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_grid_des, prev_delta, max_grid_size) {
+suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_delta, max_grid_size) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   phi <- phII - num_strat * min_n
@@ -22,7 +21,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_
     gcd <- max(seq(1, (gcd - 1))[gcd %% seq(1, (gcd - 1)) == 0])
   }
   steps <- c(steps, 1)
-  first_step <- min(steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size])
+  first_step <- min(steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size])
 
   if (is.null(prev_grid_des)) {
     return(first_step)
@@ -36,7 +35,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_
     keep <- rep(TRUE, length(steps))
     keep[steps >= prev_delta] <- FALSE
     for (i in 2:length(steps)) {
-      size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
+      size <- grid_size(delta = steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
       if (size > max_grid_size | size <= 1) {
         keep[i] <- FALSE
       }
@@ -46,7 +45,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, closed = NULL, prev_
       smaller_steps <- seq(1, (prev_delta - 1))
       keep <- rep(TRUE, length(smaller_steps))
       for (i in 1:length(smaller_steps)) {
-        size <- grid_size(delta = smaller_steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, closed = closed, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
+        size <- grid_size(delta = smaller_steps[i], phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = prev_grid_des, prev_delta = prev_delta)
         if (size > max_grid_size) {
           keep[i] <- FALSE
         }
