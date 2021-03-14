@@ -1,15 +1,15 @@
 Package: auditDesignR
-Title: Optimal Validation Proportions for Likelihood-Based Methods under Outcome and Covariate Misclassification
+Title: Optimal Two-Phase Sampling for Likelihood-Based Methods under Outcome and Exposure Misclassification
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Sarah",
            family = "Lotspeich",
            role = c("aut", "cre"),
            email = "sarah.c.lotspeich@vanderbilt.edu")
-Description: This package contains functions for two-phase sampling under measurement error settings for misclassified binary outcomes and exposures. 
+Description: This package contains functions for two-phase sampling and optimal validation study design under measurement error settings for misclassified binary outcomes and exposures. 
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Suggests: 
-  parallel
+Imports: 
+  ggplot2
