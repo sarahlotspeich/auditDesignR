@@ -5,9 +5,9 @@
 #' @param phI_strat Phase I stratum sample sizes as a named list, dataframe, or vector
 #' @param phIIa_strat For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector Default is \code{NULL}.
 #' @param min_n Minimum stratum size to be sampled.
-#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.
+#' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). All variables must be coded as binary.
 #' @param steps (Optional) Vector of step sizes for the grid search. Default is \code{NULL}, in which case the internal \code{suggest_step} function is used to choose grid scale.
-#' @param indiv_score Matrix of score vectors for all parameters.
+#' @param indiv_score Matrix of score vectors for all parameters (returned from the \code{score} function.
 #' @param return_full_grid If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
 #' @param max_grid_size Integer maxium for the largest grids that will be searched.
 #' @return

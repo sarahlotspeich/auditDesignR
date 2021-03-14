@@ -28,11 +28,11 @@ optMLE_grid(
 
 \item{min_n}{Minimum stratum size to be sampled.}
 
-\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
+\item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). All variables must be coded as binary.}
 
 \item{steps}{(Optional) Vector of step sizes for the grid search. Default is \code{NULL}, in which case the internal \code{suggest_step} function is used to choose grid scale.}
 
-\item{indiv_score}{Matrix of score vectors for all parameters.}
+\item{indiv_score}{Matrix of score vectors for all parameters (returned from the \code{score} function.}
 
 \item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
 
