@@ -24,6 +24,12 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   num_strat <- length(phI_strat)
   phi <- phII - sum(unlist(pmin(phI_strat, min_n)))
 
+  # Create stratum IDs for merging with sampling probabilities
+  indiv_score$strat <- "N"
+  for (v in sample_on) {
+    indiv_score$strat <- paste0(indiv_score$strat, indiv_score[, v])
+  }
+
   if (is.null(steps)) {
     # Initial audit step size
     audit_steps <- as.vector(suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size))
