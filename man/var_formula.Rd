@@ -4,7 +4,7 @@
 \alias{var_formula}
 \title{Derived asymptotic variance of the MLE for beta, the logOR of X on Y}
 \usage{
-var_formula(pi_vec = NULL, phI, indiv_score, sample_on)
+var_formula(pi_vec, phI, indiv_score, sample_on)
 }
 \arguments{
 \item{pi_vec}{Vector of sampling probabilities (returned from \code{calc_pi_vec}).}
