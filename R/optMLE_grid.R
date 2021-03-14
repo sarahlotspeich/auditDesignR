@@ -22,7 +22,7 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- length(phI_strat)
-  phi <- phII - num_strat * min_n
+  phi <- phII - sum(unlist(pmin(phI_strat, min_n)))
 
   if (is.null(steps)) {
     # Initial audit step size
