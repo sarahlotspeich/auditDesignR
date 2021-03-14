@@ -48,10 +48,6 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   # Create a dataframe to store all grid's optimal designs
   all_opt_des <- data.frame()
 
-  if (!(num_strat %in% c(2, 4, 8))) {
-    return(warning("optMLE_grid() handles sampling on 2, 4, or 8 strata."))
-  }
-
   it <- 1
 
   # Run initial grid search
