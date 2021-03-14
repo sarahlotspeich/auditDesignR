@@ -23,7 +23,6 @@ grid_size(
   phi,
   num_strat,
   phI_strat,
-  closed = NULL,
   prev_grid_des = NULL,
   prev_delta = NULL
 )
@@ -31,9 +30,9 @@ grid_size(
 \arguments{
 \item{delta}{Audit step size (in people).}
 
-\item{phi}{Number of people to be allocated: \code{phi = phII - num_strat * min_n}.}
+\item{phi}{Number of people to be allocated.}
 
-\item{num_strat}{Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.}
+\item{num_strat}{Number of strata on which sampling is based.}
 
 \item{phI_strat}{Phase I stratum sample sizes, named list.}
 

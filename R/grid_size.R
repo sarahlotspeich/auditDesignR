@@ -1,23 +1,17 @@
 #' Calculate size of the audit grid
 #' @name grid_size
 #' @param delta Audit step size (in people).
-#' @param phi Number of people to be allocated: \code{phi = phII - num_strat * min_n}.
-#' @param num_strat Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.
-#' @param closed For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.
+#' @param phi Number of people to be allocated.
+#' @param num_strat Number of strata on which sampling is based.
 #' @param phI_strat Phase I stratum sample sizes, named list.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
 #' @return An integer.
 #' @export
-grid_size <- function(delta, phi, num_strat, phI_strat, closed = NULL, prev_grid_des = NULL, prev_delta = NULL) {
+grid_size <- function(delta, phi, num_strat, phI_strat, prev_grid_des = NULL, prev_delta = NULL) {
   # Stars and bars
   stars <- phi / delta
   bars <- num_strat - 1
-
-  # Exclude closed strata
-  if (length(closed) > 0) {
-    phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
-  }
 
   if (is.null(prev_grid_des)) {
     return(choose(n = (stars + bars), k = (bars)))
@@ -26,11 +20,6 @@ grid_size <- function(delta, phi, num_strat, phI_strat, closed = NULL, prev_grid
     window_lb <- pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta
     window_ub <- pmin(prev_grid_des + prev_delta, unlist(phI_strat)) / delta
 
-    # Exclude closed strata from calculations
-    if (length(closed) > 0) {
-      window_lb[closed] <- NA
-      window_ub[closed] <- NA
-    }
     window_lb <- window_lb[!is.na(window_lb)]
     window_ub <- window_ub[!is.na(window_ub)]
 
