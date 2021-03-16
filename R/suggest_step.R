@@ -47,7 +47,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, num_steps = "smalles
       }
     }
     # If no factors will work, consider all numbers smaller (if previous was small enough)
-    if (mean(keep) == 0 & prev_delta <= 20) {
+    if (mean(keep) == 0) {
       smaller_steps <- seq(1, (prev_delta - 1))
       keep <- rep(TRUE, length(smaller_steps))
       for (i in 1:length(smaller_steps)) {
