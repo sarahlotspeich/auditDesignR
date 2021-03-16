@@ -29,7 +29,7 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, num_steps = "smalles
     if (num_steps == "smallest") {
       return(first_step)
     } else if (num_steps == "all") {
-      return(small_enough)
+      return(steps)
     }
   } else if (length(steps) > 1 & num_steps == "smallest") {
     if (first_step == prev_delta) {
