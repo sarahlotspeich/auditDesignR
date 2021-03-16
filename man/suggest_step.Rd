@@ -9,6 +9,7 @@ suggest_step(
   phI_strat,
   min_n,
   num_strat,
+  num_steps = "smallest",
   prev_grid_des,
   prev_delta,
   max_grid_size
@@ -20,6 +21,8 @@ suggest_step(
 \item{min_n}{Minimum stratum size to be sampled.}
 
 \item{num_strat}{Number of strata on which sampling is based.}
+
+\item{num_steps}{Character option for how many steps to be returned, options include \code{"smallest"} and \code{"all"}. DEFAULT is \code{"smallest"}.}
 
 \item{prev_grid_des}{If grid > 1, the audit from the previous iteration that was optimal.}
 

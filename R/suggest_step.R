@@ -3,12 +3,13 @@
 #' @param phII Phase II sample size.
 #' @param min_n Minimum stratum size to be sampled.
 #' @param num_strat Number of strata on which sampling is based.
+#' @param num_steps Character option for how many steps to be returned, options include \code{"smallest"} and \code{"all"}. DEFAULT is \code{"smallest"}.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_grid_delta If grid > 1, the step size from the previous iteration.
 #' @param max_grid_size Integer maxium for the largest grids that will be searched.
 #' @return An integer.
 #' @export
-suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_delta, max_grid_size) {
+suggest_step <- function(phII, phI_strat, min_n, num_strat, num_steps = "smallest", prev_grid_des, prev_delta, max_grid_size) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   phi <- phII - sum(unlist(pmin(phI_strat, min_n)))
@@ -21,11 +22,16 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, prev_grid_des, prev_
     gcd <- max(seq(1, (gcd - 1))[gcd %% seq(1, (gcd - 1)) == 0])
   }
   steps <- c(steps, 1)
-  first_step <- min(steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size])
+  small_enough <- steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size]
+  first_step <- min(small_enough)
 
   if (is.null(prev_grid_des)) {
-    return(first_step)
-  } else if (length(steps) > 1) {
+    if (num_steps == "smallest") {
+      return(first_step)
+    } else if (num_steps == "all") {
+      return(small_enough)
+    }
+  } else if (length(steps) > 1 & num_steps == "smallest") {
     if (first_step == prev_delta) {
       steps <- c(steps[steps < prev_delta])
     } else {
