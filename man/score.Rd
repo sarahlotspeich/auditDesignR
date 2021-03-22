@@ -34,6 +34,10 @@ score(
 \item{beta}{Parameter value for the log odds ratio of \code{X_val} on \code{Y_val}.}
 
 \item{eta}{Parameter values for other nuisance parameters.}
+
+\item{nondiff_Y_unval}{If \code{TRUE}, misclassification in \code{Y_unval} is assumed to be nondifferential, i.e., independent of \code{X_val} and \code{X_unval}. Default is \code{FALSE}.}
+
+\item{nondiff_X_unval}{If \code{TRUE}, misclassification in \code{X_unval} is assumed to be nondifferential, i.e., independent of \code{Y_val}. Default is \code{FALSE}.}
 }
 \value{
 Matrix with one column for the score vector for each parameter \code{beta}, \code{eta}.
