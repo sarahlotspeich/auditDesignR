@@ -13,7 +13,7 @@
 #' @param eta Parameter values for other nuisance parameters.
 #' @return Matrix with one column for the score vector for each parameter \code{beta}, \code{eta}.
 #' @export
-score <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, beta, eta) {
+score <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, nondiff_Y_unval = FALSE, nondiff_X_unval = FALSE, beta, eta) {
   val <- which(comp_dat[, Validated] == 1)
   n <- length(val)
 
