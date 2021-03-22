@@ -85,7 +85,7 @@ score <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_c
 
   ## S(gamma4), ..., S(gamma6)
   if (!is.null(X_unval)) {
-    if (nondiff_X_unval) {
+    if (!nondiff_X_unval) {
       mu3 <- data.matrix(cbind(1, Si_theta[, c(Y_val, X_val, addl_covar)])) %*% matrix(gamma_Xstar, ncol = 1)
       pXstar <- prob_logistic(y = Si_theta[, X_unval], mu = mu3)
       d_delta <- matrix(data = NA, nrow = nrow(comp_dat), ncol = length(gamma_Xstar))
