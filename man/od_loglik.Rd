@@ -13,6 +13,8 @@ od_loglik(
   X_unval = NULL,
   addl_covar = NULL,
   Validated,
+  nondiff_Y_unval = FALSE,
+  nondiff_X_unval = FALSE,
   for_nlm = TRUE
 )
 }
@@ -28,6 +30,10 @@ od_loglik(
 \item{addl_covar}{Column(s) with additional error-free covariates (can be name or numeric index).}
 
 \item{Validated}{Columns with the validation indicator (can be name or numeric index).}
+
+\item{nondiff_Y_unval}{If \code{TRUE}, misclassification in \code{Y_unval} is assumed to be nondifferential, i.e., independent of \code{X_val} and \code{X_unval}. Default is \code{FALSE}.}
+
+\item{nondiff_X_unval}{If \code{TRUE}, misclassification in \code{X_unval} is assumed to be nondifferential, i.e., independent of \code{Y_val}. Default is \code{FALSE}.}
 
 \item{for_nlm}{If \code{TRUE} (DEFAULT), the function returns the negative function value (for use with built-in optimization routines like \code{nlm}).}
 }
