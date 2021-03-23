@@ -53,7 +53,7 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
                iterlim = 250,
                hessian = !noSE)
   )
-  SE <- tryCatch(expr = sqrt(diag(solve(fit_Tang))),  error = function(err) {NA})
+  SE <- tryCatch(expr = sqrt(diag(solve(fit))),  error = function(err) {NA})
   conv <- fit$code <= 2
   if (conv) {
     beta <- fit$estimate[1]
