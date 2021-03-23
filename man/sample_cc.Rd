@@ -4,33 +4,16 @@
 \alias{sample_cc}
 \title{Sample unvalidated case-control (CC*) audit based on Phase I variables.}
 \usage{
-sample_cc(
-  dat,
-  Y_unval = NULL,
-  Y_val,
-  X_unval = NULL,
-  X_val,
-  phI,
-  phII,
-  errors_in = "Both"
-)
+sample_cc(dat, phI, phII, sample_on)
 }
 \arguments{
-\item{dat}{Dataframe or matrix containing columns \code{Y_unval}, \code{Y_val}, \code{X_unval}, \code{X_val}.}
-
-\item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "X only"}.)}
-
-\item{Y_val}{Column with the validated outcome (can be name or numeric index).}
-
-\item{X_unval}{Column(s) with the unvalidated predictors (can be name or numeric index). (Left \code{NULL} if \code{errors_in = "Y only"}.)}
-
-\item{X_val}{Column(s) with the validated predictors (can be name or numeric index).}
+\item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
 
 \item{phI}{Phase I sample size.}
 
 \item{phII}{Phase II sample size.}
 
-\item{errors_in}{Measurement error setting, options are \code{"Both"}, \code{"Y only"}, \code{"X only"}. Default is \code{"Both"}.}
+\item{sample_on}{Column with the Phase I outcome variable (should be categorical) used for sampling strata (can be name or numeric index).}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
