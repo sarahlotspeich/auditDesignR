@@ -18,16 +18,21 @@
 #' \item{conv}{\code{TRUE}/\code{FALSE} for convergence}
 #' @export
 twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, nondiff_Y_unval = FALSE, nondiff_X_unval = FALSE, noSE = FALSE) {
-  if (!nondiff_Y_unval) {
-    params_Y_unval <- c("(Intercept)", X_unval, Y_val, X_val, addl_covar)
-  } else {
-    params_Y_unval <- c("(Intercept)", Y_val, addl_covar)
+
+  if (!is.null(Y_unval)) {
+    if (!nondiff_Y_unval) {
+      params_Y_unval <- c("(Intercept)", X_unval, Y_val, X_val, addl_covar)
+    } else {
+      params_Y_unval <- c("(Intercept)", Y_val, addl_covar)
+    }
   }
 
-  if (!nondiff_X_unval) {
-    params_X_unval <- c("(Intercept)", Y_val, X_val, addl_covar)
-  } else {
-    params_X_unval <- c("(Intercept)", X_val, addl_covar)
+  if (!is.null(X_unval)) {
+    if (!nondiff_X_unval) {
+      params_X_unval <- c("(Intercept)", Y_val, X_val, addl_covar)
+    } else {
+      params_X_unval <- c("(Intercept)", X_val, addl_covar)
+    }
   }
 
   params_Y_val <- c("(Intercept)", addl_covar, X_val)
@@ -46,13 +51,54 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
                nondiff_X_unval = nondiff_X_unval,
                nondiff_Y_unval = nondiff_Y_unval,
                iterlim = 250,
-               hessian = F)
+               hessian = !noSE)
   )
-
+  SE <- tryCatch(expr = sqrt(diag(solve(fit_Tang))),  error = function(err) {NA})
   conv <- fit$code <= 2
   if (conv) {
+    beta <- fit$estimate[1]
+    SE_beta <- SE[1]
+    eta <- fit$estimate[-1]
+    SE_eta <- SE[-1]
+    alpha <- eta[1:(1 + length(addl_covar))]
+    SE_alpha <- SE_eta[1:(1 + length(addl_covar))]
+    eta <- eta[-c(1:(1 + length(addl_covar)))]
+    SE_eta <- SE_eta[-c(1:(1 + length(addl_covar)))]
+
+    coeff_Y_val <- data.frame(Coeff = params_Y_val,
+                              Est = c(alpha[1], beta, alpha[-1]),
+                              SE = c(SE_alpha[1], SE_beta, SE_alpha[-1]))
+
+    # Parameters P(Y_unval|X_unval, Y_val, X_val, addl_covar)
+    if (!is.null(Y_unval)) {
+      coeff_Y_unval <- data.frame(Coeff = params_Y_unval,
+                                  Est = eta[1:length(params_Y_unval)],
+                                  SE = SE_eta[1:length(params_Y_unval)])
+      eta <- eta[-c(1:length(params_Y_unval))]
+      SE_eta <- SE_eta[-c(1:length(params_Y_unval))]
+    } else {
+      coeff_Y_unval <- NULL
+    }
+
+    # Parameters P(X_unval|Y_val, X_val, addl_covar)
+    if (!is.null(X_unval)) {
+      coeff_X_unval <- data.frame(Coeff = params_X_unval,
+                                  Est = eta[1:length(params_X_unval)],
+                                  SE = SE_eta[1:length(params_X_unval)])
+      eta <- eta[-c(1:length(params_X_unval))]
+      SE_eta <- SE_eta[-c(1:length(params_X_unval))]
+    } else {
+      coeff_X_unval <- NULL
+    }
+
+    # Parameters P(X_val|addl_covar)
+    coeff_X_val <- data.frame(Coeff = params_X_val,
+                              Est = eta[1:length(params_X_val)],
+                              SE = SE_eta[1:length(params_X_val)])
+
+    return(list(mod_Y_val = coeff_Y_val, mod_Y_unval = coeff_Y_unval, mod_X_unval = coeff_X_unval, mod_X_val = coeff_X_val, conv = conv))
 
   } else {
-
+    return(list(mod_Y_val = NA, mod_Y_unval = NA, mod_X_unval = NA, mod_X_val = NA, conv = conv))
   }
 }
