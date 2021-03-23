@@ -40,7 +40,7 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
 
   suppressWarnings(
     fit <- nlm(f = od_loglik,
-               p = rep(0, length(c(params_Y_unval, params_X_val, params_Y_val, params_X_val))),
+               p = rep(0, length(c(params_Y_unval, params_X_unval, params_Y_val, params_X_val))),
                dat = dat,
                Y_val = Y_val,
                Y_unval = Y_unval,
