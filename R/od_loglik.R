@@ -1,5 +1,7 @@
 #' Observed-data log-likelihood for measurement error settings with errors in outcome + exposure
 #' @name od_loglik
+#' @param params Vector of parameter vales for all models.
+#' @param dat Data containing all columns referenced in \code{Y_unval}, \code{Y_val}, \code{X_unval}, \code{X_val}, \code{addl_covar}, and \code{Validated}.
 #' @param Y_unval Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).
 #' @param Y_val Column with the validated outcome (can be name or numeric index).
 #' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index). If covariates are error-free, \code{X_unval = NULL} (DEFAULT).

@@ -19,6 +19,10 @@ od_loglik(
 )
 }
 \arguments{
+\item{params}{Vector of parameter vales for all models.}
+
+\item{dat}{Data containing all columns referenced in \code{Y_unval}, \code{Y_val}, \code{X_unval}, \code{X_val}, \code{addl_covar}, and \code{Validated}.}
+
 \item{Y_val}{Column with the validated outcome (can be name or numeric index).}
 
 \item{Y_unval}{Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).}
