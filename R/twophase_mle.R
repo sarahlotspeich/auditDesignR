@@ -67,13 +67,15 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
 
     coeff_Y_val <- data.frame(Coeff = params_Y_val,
                               Est = c(alpha[1], beta, alpha[-1]),
-                              SE = c(SE_alpha[1], SE_beta, SE_alpha[-1]))
+                              SE = c(SE_alpha[1], SE_beta, SE_alpha[-1]),
+                              stringsAsFactors = FALSE)
 
     # Parameters P(Y_unval|X_unval, Y_val, X_val, addl_covar)
     if (!is.null(Y_unval)) {
       coeff_Y_unval <- data.frame(Coeff = params_Y_unval,
                                   Est = eta[1:length(params_Y_unval)],
-                                  SE = SE_eta[1:length(params_Y_unval)])
+                                  SE = SE_eta[1:length(params_Y_unval)],
+                                  stringsAsFactors = FALSE)
       eta <- eta[-c(1:length(params_Y_unval))]
       SE_eta <- SE_eta[-c(1:length(params_Y_unval))]
     } else {
@@ -84,7 +86,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
     if (!is.null(X_unval)) {
       coeff_X_unval <- data.frame(Coeff = params_X_unval,
                                   Est = eta[1:length(params_X_unval)],
-                                  SE = SE_eta[1:length(params_X_unval)])
+                                  SE = SE_eta[1:length(params_X_unval)],
+                                  stringsAsFactors = FALSE)
       eta <- eta[-c(1:length(params_X_unval))]
       SE_eta <- SE_eta[-c(1:length(params_X_unval))]
     } else {
@@ -94,7 +97,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
     # Parameters P(X_val|addl_covar)
     coeff_X_val <- data.frame(Coeff = params_X_val,
                               Est = eta[1:length(params_X_val)],
-                              SE = SE_eta[1:length(params_X_val)])
+                              SE = SE_eta[1:length(params_X_val)],
+                              stringsAsFactors = FALSE)
 
     return(list(mod_Y_val = coeff_Y_val, mod_Y_unval = coeff_Y_unval, mod_X_unval = coeff_X_unval, mod_X_val = coeff_X_val, conv = conv))
 
