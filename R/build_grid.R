@@ -5,19 +5,13 @@
 #' @param num_strat Number of strata on which sampling is based. Currently handles \code{num_strat} = 2, 4, or 8.
 #' @param phI_strat Phase I stratum sample sizes as a named list, dataframe, or vector
 #' @param phIIa_strat For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector. Default is \code{NULL}.
-#' @param closed For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.
-#' @param closed_at For multi-wave designs, a vector of already sampled sizes for strata that are "closed" (must be the same length as \code{closed}). Default is \code{NULL}.
 #' @param min_n Minimum stratum size to be sampled.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_delta If grid > 1, the step size from the previous iteration.
+#' @param grid_window As an alternative to \code{prev_delta}, specify a custom \code{grid_window = c(start, end)} around \code{prev_grid_des}.
 #' @export
-build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, closed = NULL, closed_at = NULL, min_n, prev_grid_des = NULL, prev_delta = NULL) {
+build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, min_n, prev_grid_des = NULL, prev_delta = NULL, grid_window = NULL) {
   stars <- round(phi / delta)
-
-  # Exclude closed strata
-  if (length(closed) > 0) {
-    phI_strat <- phI_strat[names(phI_strat) !=  toupper(closed)]
-  }
 
   # If Phase II(a) strata were provided, these need to be substracted from phI_strat
   ## Since they are no longer available for audit in Phase II(b)
@@ -38,11 +32,21 @@ build_grid <- function(delta, phi, num_strat, phI_strat, phIIa_strat = NULL, clo
     }
   } else {
     if (!is.null(phIIa_strat)) {
-      window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
-      window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat_rem) - pmin(unlist(phI_strat_rem), min_n))) / delta)
+      if (!is.null(grid_window)) {
+        window_lb <- floor(pmax(grid_window[1], rep(0, num_strat)) / delta)
+        window_ub <- floor(pmin(grid_window[2], (unlist(phI_strat_rem) - pmin(unlist(phI_strat_rem), min_n))) / delta)
+      } else if (!is.null(prev_delta)){
+        window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
+        window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat_rem) - pmin(unlist(phI_strat_rem), min_n))) / delta)
+      }
     } else {
-      window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
-      window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
+      if (!is.null(grid_window)) {
+        window_lb <- floor(pmax(grid_window[1], rep(0, num_strat)) / delta)
+        window_ub <- floor(pmin(grid_window[2], (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
+      } else if (!is.null(prev_delta)){
+        window_lb <- floor(pmax(prev_grid_des - prev_delta, rep(0, num_strat)) / delta)
+        window_ub <- floor(pmin(prev_grid_des + prev_delta, (unlist(phI_strat) - pmin(unlist(phI_strat), min_n))) / delta)
+      }
     }
   }
 

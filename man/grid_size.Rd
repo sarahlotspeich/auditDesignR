@@ -11,11 +11,10 @@ build_grid(
   num_strat,
   phI_strat,
   phIIa_strat = NULL,
-  closed = NULL,
-  closed_at = NULL,
   min_n,
   prev_grid_des = NULL,
-  prev_delta = NULL
+  prev_delta = NULL,
+  grid_window = NULL
 )
 
 grid_size(
@@ -38,15 +37,13 @@ grid_size(
 
 \item{phIIa_strat}{For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector. Default is \code{NULL}.}
 
-\item{closed}{For multi-wave designs, a vector of names for strata that are "closed", meaning we do not wish to sample from them. Default is \code{NULL}.}
-
-\item{closed_at}{For multi-wave designs, a vector of already sampled sizes for strata that are "closed" (must be the same length as \code{closed}). Default is \code{NULL}.}
-
 \item{min_n}{Minimum stratum size to be sampled.}
 
 \item{prev_grid_des}{If grid > 1, the audit from the previous iteration that was optimal.}
 
 \item{prev_delta}{If grid > 1, the step size from the previous iteration.}
+
+\item{grid_window}{As an alternative to \code{prev_delta}, specify a custom \code{grid_window = c(start, end)} around \code{prev_grid_des}.}
 }
 \value{
 An integer.
