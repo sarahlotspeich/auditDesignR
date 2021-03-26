@@ -8,77 +8,39 @@
 #' @export
 sample_optMLE <- function(dat, sample_on, des, wave1_Validated = NULL) {
   phI <- nrow(dat)
+  # Cross-tabulate Phase I data (Y*)
+  phI_tab <- data.frame(table(dat[, c(sample_on, wave1_Validated)]))
+  colnames(phI_tab)[1:length(sample_on)] <- sample_on
+  colnames(phI_tab)[ncol(phI_tab)] <- "N"
+  #phI_tab$target <- pmin(floor(phII / nrow(phI_tab)), phI_tab$N)
 
-  # Cross-tabulate Phase I data (sample_on)
-  phI_tab <- table(dat[, sample_on])
-  num_strat <- 2 ^ length(sample_on)
-
-  if (num_strat == 2) {
-    if (!is.null(wave1_Validated)) {
-      # Create index vectors for subjects
-      ## Exclude subjects who were already validated in wave 1
-      ind_N1 <- which(dat[, sample_on[1]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N0 <- which(dat[, sample_on[1]] == 0 & dat[, wave1_Validated] == 0)
-    } else {
-      # Create index vectors for subjects
-      ind_N1 <- which(dat[, sample_on[1]] == 1)
-      ind_N0 <- which(dat[, sample_on[1]] == 0)
-    }
-
-    V_optMLE <- as.numeric(seq(1, phI) %in% c(sample(x = ind_N1, size = des$n1, replace = F),
-                                              sample(x = ind_N0, size = des$n0, replace = F)))
-  } else if (num_strat == 4) {
-    if (!is.null(wave1_Validated)) {
-      # Create index vectors for subjects
-      ## Exclude subjects who were already validated in wave 1
-      ind_N11 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N10 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0 & dat[, wave1_Validated] == 0)
-      ind_N01 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N00 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0 & dat[, wave1_Validated] == 0)
-    } else {
-      # Create index vectors for subjects
-      ind_N11 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1)
-      ind_N10 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0)
-      ind_N01 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1)
-      ind_N00 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0)
-    }
-
-    V_optMLE <- as.numeric(seq(1, phI) %in% c(sample(x = ind_N11, size = des$n11, replace = F),
-                                              sample(x = ind_N10, size = des$n10, replace = F),
-                                              sample(x = ind_N01, size = des$n01, replace = F),
-                                              sample(x = ind_N00, size = des$n00, replace = F)))
-  } else if (num_strat == 8) {
-    if (!is.null(wave1_Validated)) {
-      # Create index vectors for subjects
-      ## Exclude subjects who were already validated in wave 1
-      ind_N11_0 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 0 & dat[, wave1_Validated] == 0)
-      ind_N10_0 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 0 & dat[, wave1_Validated] == 0)
-      ind_N01_0 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 0 & dat[, wave1_Validated] == 0)
-      ind_N00_0 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 0 & dat[, wave1_Validated] == 0)
-      ind_N11_1 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N10_1 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N01_1 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 1 & dat[, wave1_Validated] == 0)
-      ind_N00_1 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 1 & dat[, wave1_Validated] == 0)
-    } else {
-      # Create index vectors for subjects
-      ind_N11_0 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 0)
-      ind_N10_0 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 0)
-      ind_N01_0 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 0)
-      ind_N00_0 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 0)
-      ind_N11_1 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 1)
-      ind_N10_1 <- which(dat[, sample_on[1]] == 1 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 1)
-      ind_N01_1 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 1 & dat[, sample_on[3]] == 1)
-      ind_N00_1 <- which(dat[, sample_on[1]] == 0 & dat[, sample_on[2]] == 0 & dat[, sample_on[3]] == 1)
-    }
-    V_optMLE <- as.numeric(seq(1, phI) %in% c(sample(x = ind_N11_0, size = des$n11_0, replace = F),
-                                              sample(x = ind_N10_0, size = des$n10_0, replace = F),
-                                              sample(x = ind_N01_0, size = des$n01_0, replace = F),
-                                              sample(x = ind_N00_0, size = des$n00_0, replace = F),
-                                              sample(x = ind_N11_1, size = des$n11_1, replace = F),
-                                              sample(x = ind_N10_1, size = des$n10_1, replace = F),
-                                              sample(x = ind_N01_1, size = des$n01_1, replace = F),
-                                              sample(x = ind_N00_1, size = des$n00_1, replace = F)))
-
+  if (!is.null(wave1_Validated)) {
+    phI_tab <- phI_tab[phI_tab[, wave1_Validated] == 0, ]
   }
-  return(V_optMLE)
+
+  des_long <- data.frame(t(des[grep("n", colnames(des))]))
+  colnames(des_long) <- "target"
+  des_long$strat <- gsub("n", "N", rownames(des_long))
+
+  # Create stratum IDs to sample on
+  phI_tab$strat <- "N"
+  dat$strat <- "N"
+  for (s in sample_on) {
+    phI_tab$strat <- paste0(phI_tab$strat, phI_tab[, s])
+    dat$strat <- paste0(dat$strat, dat[, s])
+  }
+
+  phI_tab <- merge(phI_tab, des_long)
+
+  V <- vector()
+  for (i in 1:nrow(phI_tab)) {
+    if (!is.null(wave1_Validated)) {
+      V <- append(V, sample(x = which(dat[, "strat"] == phI_tab[i, "strat"] & dat[, wave1_Validated] == 0), size = phI_tab[i, "target"], replace = F))
+    } else {
+      V <- append(V, sample(x = which(dat[, "strat"] == phI_tab[i, "strat"]), size = phI_tab[i, "target"], replace = F))
+    }
+  }
+
+  V <- as.numeric(seq(1, phI) %in% V[order(V)])
+  return(V)
 }
