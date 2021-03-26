@@ -85,6 +85,9 @@ optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample
       }
     }
 
+    if (max(prev_step / 2, 1) == 1) {
+      prev_grid_des <- round(prev_grid_des)
+    }
     # Run grid search
     grid <- build_grid(delta = max(prev_step / 2, 1), phi = phi, num_strat = num_strat, phI_strat = phI_strat, phIIa_strat = phIIa_strat, min_n = min_n, prev_grid_des = prev_grid_des, prev_delta = max(prev_step / 2, 1))
     grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
@@ -115,7 +118,7 @@ optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample
                   "message" = "Tie for minimum"))
     }
 
-    findOptimal <- sum(grid$Vbeta == min_var) == 1 & (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) < 1E-8
+    findOptimal <- sum(grid$Vbeta == min_var) == 1# & (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) < 1E-8
     # if (findOptimal &
     #     rowSums(min_var_design) > phII) { findOptimal <- TRUE }
 
