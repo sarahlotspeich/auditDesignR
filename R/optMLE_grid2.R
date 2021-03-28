@@ -8,6 +8,8 @@
 #' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). All variables must be coded as binary.
 #' @param indiv_score Matrix of score vectors for all parameters (returned from the \code{score} function.
 #' @param return_full_grid If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
+#' @param first_step (Optional) Starting grid scale.
+#' @param max_grid_size (Optional) Integer maxium for the largest starting grid allowed if \code{first_step = NULL}.
 #' @return
 #' \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
 #' \item{min_var}{Value of the variance achieved by the optimal design in the last iteration.}
@@ -16,7 +18,7 @@
 #' \item{full_grid_search}{If \code{return_full_grid} = TRUE, a dataframe containing all grids from ann iterations.}
 #' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information"}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 #' @export
-optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_on, indiv_score, return_full_grid = FALSE) {
+optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_on, indiv_score, return_full_grid = FALSE, first_step = NULL, max_grid_size = 10000) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- length(phI_strat)
@@ -33,8 +35,14 @@ optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample
 
   it <- 1
 
+  if (is.null(first_step)) {
+    prev_step <- suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = NULL, prev_delta = NULL, max_grid_size = max_grid_size) #phi
+  } else {
+    prev_step <- first_step
+  }
+
   # Run initial grid search
-  grid <- build_grid(delta = phi, phi = phi, num_strat = num_strat, phI_strat = phI_strat, phIIa_strat = phIIa_strat, min_n = min_n, prev_grid_des = NULL, prev_delta = NULL)
+  grid <- build_grid(delta = prev_step, phi = phi, num_strat = num_strat, phI_strat = phI_strat, phIIa_strat = phIIa_strat, min_n = min_n, prev_grid_des = NULL, prev_delta = NULL)
   grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
   min_var <- min(grid$Vbeta)
 
@@ -56,12 +64,11 @@ optMLE_grid2 <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample
 
   # Save previous grid & step size
   prev_grid <- grid
-  prev_step <- phi
 
   # Check for a clear minimum
   min_var_design <- prev_min <- grid[grid$Vbeta == min_var, ]
   all_opt_des <- rbind(all_opt_des,
-                       cbind(grid = 1, audit_step = phi, min_var_design, grid_size = nrow(grid)))
+                       cbind(grid = 1, audit_step = prev_step, min_var_design, grid_size = nrow(grid)))
 
   # Create dataframe to store all designs
   if (return_full_grid) { all_grids <- cbind(grid = 1, grid) }

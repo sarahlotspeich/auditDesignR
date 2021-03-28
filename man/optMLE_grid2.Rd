@@ -12,7 +12,9 @@ optMLE_grid2(
   min_n,
   sample_on,
   indiv_score,
-  return_full_grid = FALSE
+  return_full_grid = FALSE,
+  first_step = NULL,
+  max_grid_size = 10000
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ optMLE_grid2(
 \item{indiv_score}{Matrix of score vectors for all parameters (returned from the \code{score} function.}
 
 \item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
+
+\item{first_step}{(Optional) Starting grid scale.}
+
+\item{max_grid_size}{(Optional) Integer maxium for the largest starting grid allowed if \code{first_step = NULL}.}
 }
 \value{
 \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
