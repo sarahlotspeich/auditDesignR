@@ -7,7 +7,7 @@ To install the package, run the following in your `R` console: `devtools::instal
 
 ### Validation Study Designs
 
-  - Simple random sampling (SRS): All subjects in Phase I have equal probability of inclusion in Phase II.
+  - *Simple random sampling (SRS):* All subjects in Phase I have equal probability of inclusion in Phase II.
   - Unvalidated case-control sampling (CC*) Subjects are stratified on Y* and separate random samples of size n/2 are drawn from each stratum.
   - Unvalidated balanced case-control sampling (BCC*) Subjects are jointly stratified on (Y*, X*) and separate random samples of size n/4 subjects drawn from each stratum. 
   - Optimal design (optMLE): Subjects are jointly stratified on (Y*,X*), and stratum sizes are chosen following Section 2.2. The optMLE is included as a "gold standard" design since it requires knowing the parameters θ.
