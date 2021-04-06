@@ -18,13 +18,7 @@ Inside the `simulations` subdirectory, you will find the following:
 
 #### Table 1: Simulation results under outcome and exposure misclassification
 
-Data were generated for a Phase I sample of N = 10000 subjects according to equation (1). 
-
-True X and Y were generated from Bernoulli distributions with P(X=1) = 0.1 or 0.9 and P(Y=1|X) = [1/1 + \exp\{-(β0 + 0.3 X)\}]. The approximate outcome prevalence P(Y=1|X=0) was used to define β0 = log{P(Y=1|X=0) / (1 - P(Y=1|X=0))}. We varied P(Y=1|X=0) = 0.1, 0.3, or 0.9.
-
-Error-prone Y* and X* were generated from Bernoulli distributions with P(X*=1|Y,X) = 1/[1 + \exp\{-(γ0 + 0.45 Y + γ1 X)\}] and P(Y*=1|X*,Y,X) = 1/[1 + \exp\{-(α0 + 0.275X* + α1 Y + 0.275 X)\}], where (γ0, γ1) and (α0, α1) control the strength of the relationship between error-prone and error-free values. We define the "baseline" false positive and true positive rates for X*, denoted FPR0(X*) and TPR0(X*), respectively, as the false positive and true positive rates of X* when Y=0. Similarly, FPR0(Y*)$ and TPR0(Y*) are the false positive and true positive rates for Y* when X=X*=0.  With these definitions, we have α0 = -log[{1 - FPR0(Y*)}/FPR0(Y*)], α1 = -log[{1 - TPR0(Y*)}/TPR0(Y*)] - α0, γ0 = -log[{1 - FPR0(X*)}/FPR0(X*)], and γ1 = -\log[{1 - TPR0(X*)}/TPR0(X*)] - γ0. 
-
-Using the designs in Section 3.1, n = 400 subjects were selected in Phase II. 
+![](images/Table1_Setting)
 
 File: `Table1_SimSetup.R`
 
