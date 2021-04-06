@@ -1,3 +1,7 @@
+###########################################################
+# Exposure only misclassification #########################
+###########################################################
+
 #Run once: devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")
 library(auditDesignR)
 

@@ -1,3 +1,7 @@
+###########################################################
+# Outcome and exposure misclassification ##################
+###########################################################
+
 #Run once: devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")
 library(auditDesignR)
 
