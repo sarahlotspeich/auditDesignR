@@ -25,6 +25,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
     } else {
       params_Y_unval <- c("(Intercept)", Y_val, addl_covar)
     }
+  } else {
+    params_Y_unval <- NULL
   }
 
   if (!is.null(X_unval)) {
@@ -33,6 +35,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
     } else {
       params_X_unval <- c("(Intercept)", X_val, addl_covar)
     }
+  } else {
+    params_X_unval <- NULL
   }
 
   params_Y_val <- c("(Intercept)", addl_covar, X_val)
