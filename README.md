@@ -24,10 +24,6 @@ File: `Table1_SimSetup.R`
 
 #### Table 2: Simulation results under outcome and exposure misclassification with available error-free covariate information
 
-Following equation (1), data were generated for a Phase I sample of N = 10000 subjects. 
+![](images/Table2_Setting.png)
 
-Error-free binary covariate Z was generated from a Bernoulli distribution with P(Z = 1) = 0.25, 0.5. True X and Y were generated from Bernoulli distributions with P(X=1|Z) = 1/[1 + exp{-(-2.2 + 0.5Z)}] and P(Y = 1|X, Z)=1/[1 + exp{-(-0.85 + 0.3X + βzZ)}], for βz = -0.25, 0, 0.25. 
-
-Baseline misclassification rates were fixed at FPR0 = 0.25 and TPR0 = 0.75 such that X* and Y^* were generated from Bernoulli distributions with P(X*=1|Y,X,Z) = 1/[1 + \exp\{-(-1.1 + 0.45 Y + 2.2 X + λZ)\}] and P(Y*=1|X*,Y,X,Z) = 1/[1 + \exp\{-(-1.1 + 0.275X* + 2.2 Y + 0.275 X + λZ)\}], where λ = -1, 0, 1. 
-
-In Phase II, n = 400 subjects were selected by extensions of Section 3.1 to sample on (Y*, X*, Z).
+File: `Table2_SimSetup.R`
