@@ -18,7 +18,7 @@ Inside the `simulations` subdirectory, you will find the following:
 
 #### Table 1: Simulation results under outcome and exposure misclassification
 
-![](images/Table1_Setting)
+![](images/Table1_Setting.png)
 
 File: `Table1_SimSetup.R`
 
