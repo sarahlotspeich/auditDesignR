@@ -16,14 +16,26 @@ To install the package, run the following in your `R` console: `devtools::instal
 ### Simulation settings 
 Inside the `simulations` subdirectory, you will find the following: 
 
-#### Table 1: Simulation results under outcome and exposure misclassification
+#### Outcome and exposure misclassification (Table 1)
 
 ![](images/Table1_Setting.png)
 
-File: `Table1_SimSetup.R`
+File: `YXboth_SimSetup.R`
 
-#### Table 2: Simulation results under outcome and exposure misclassification with available error-free covariate information
+#### Outcome and exposure misclassification with available error-free covariate information (Table 2)
 
 ![](images/Table2_Setting.png)
 
-File: `Table2_SimSetup.R`
+File: `YXboth_inclZ_SimSetup.R`
+
+#### Outcome only misclassification (Table S5(a))
+
+![](images/TableS5a_Setting.png)
+
+File: `Yonly_SimSetup.R`
+
+#### Exposure only misclassification (Table S5(b))
+
+![](images/TableS5b_Setting.png)
+
+File: `Xonly_SimSetup.R`
