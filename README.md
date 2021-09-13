@@ -23,4 +23,4 @@ Inside the `simulations` subdirectory, you will find the following:
   - `Xonly_SimSetup.R`: simulations with exposure misclassification alone, defining sampling strata on error-free outcome Y and error-prone exposure X* (top of Table S3 in the Supplemental Materials for the Manuscript).
 
 ### Example data
-Example datasets for numerous error settings can be found in `example`
+Example datasets for numerous error settings can be found in `data`.
