@@ -1,6 +1,6 @@
 # Optimal Multi-Wave Validation for Secondary Use Data with Outcome and Exposure Misclassification
 ## Lotspeich, Amorim, Shaw, Tao, and Shepherd
-The complete R package `auditDesignR` and code for the simulation settings included in the paper. 
+The complete R package `auditDesignR` and code for the simulation settings included in the paper. See the [preprint](https://arxiv.org/abs/2108.13263) for more details.
 
 ### Install
 To install the package, run the following in your `R` console: `devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")`.
@@ -16,26 +16,8 @@ To install the package, run the following in your `R` console: `devtools::instal
 ### Simulation settings 
 Inside the `simulations` subdirectory, you will find the following: 
 
-#### Outcome and exposure misclassification (Table 1)
-
-![](images/Table1_Setting.png)
-
-File: `simulations/YXboth_SimSetup.R`
-
-#### Outcome and exposure misclassification with available error-free covariate information (Table 2)
-
-![](images/Table2_Setting.png)
-
-File: `simulations/YXboth_inclZ_SimSetup.R`
-
-#### Outcome only misclassification (Table S5(a))
-
-![](images/TableS5a_Setting.png)
-
-File: `simulations/Yonly_SimSetup.R`
-
-#### Exposure only misclassification (Table S5(b))
-
-![](images/TableS5b_Setting.png)
-
-File: `simulations/Xonly_SimSetup.R`
+  - `YXboth_SimSetup.R`: simulations with outcome and exposure misclassification, defining sampling strata on error-prone outcome and exposure, Y* and X* (Table 1 in the Manuscript)
+  - `YXboth_inclZ_SimSetup.R`: simulations with outcome and exposure misclassification, defining sampling strata on error-prone outcome and exposure, Y* and X*, and error-free binary covariate Z (Table S2 in the Supplemental Materials for the Manuscript).
+  - `YXboth_inclZ_misspec_SimSetup.R`: 
+  - `Yonly_SimSetup.R`: simulations with outcome misclassification alone, defining sampling strata on error-prone outcome Y* and error-free exposure X (top of Table S3 in the Supplemental Materials for the Manuscript).
+  - `Xonly_SimSetup.R`: simulations with exposure misclassification alone, defining sampling strata on error-free outcome Y and error-prone exposure X* (top of Table S3 in the Supplemental Materials for the Manuscript).

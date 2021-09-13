@@ -1,6 +1,6 @@
 ###########################################################
 # Outcome and exposure misclassification ##################
-# with additional error-free covarite #####################
+# with additional error-free covariate ####################
 ###########################################################
 
 #Run once: devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")
