@@ -16,14 +16,14 @@
 od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, nondiff_Y_unval = FALSE, nondiff_X_unval = FALSE, for_nlm = TRUE) {
   N <- nrow(dat)
   dat[, "id"] <- seq(1, N)
-
+  
   beta <- params[1:length(X_val)]
   eta <- params[-c(1:(length(X_val)))]
-
+  
   # Parameters P(Y_val|X_val, addl_covar) - coeff for X_val were already saved as beta
   alpha <- eta[1:(1 + length(addl_covar))]
   eta <- eta[-c(1:(1 + length(addl_covar)))]
-
+  
   # Parameters P(Y_unval|X_unval, Y_val, X_val, addl_covar)
   if (!is.null(Y_unval)) {
     if (!nondiff_Y_unval) {
@@ -34,7 +34,7 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
       eta <- eta[-c(1:(1 + length(c(Y_val, addl_covar))))]
     }
   }
-
+  
   # Parameters P(X_unval|Y_val, X_val, addl_covar)
   if (!is.null(X_unval)) {
     if (!nondiff_X_unval) {
@@ -45,17 +45,17 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
       eta <- eta[-c(1:(1 + length(c(X_val, addl_covar))))]
     }
   }
-
+  
   # Parameters P(X_val|addl_covar)
   gamma_X <- eta[1:(1 + length(addl_covar))]
-
+  
   # Validated subjects ----------------------------------------------------------------------
   val <- which(as.numeric(dat[, Validated]) == 1)
   n <- length(val)
-
+  
   mu1 <- data.matrix(cbind(1, dat[val, c(addl_covar, X_val)])) %*% matrix(c(alpha, beta), ncol = 1)
   pY <- prob_logistic(y = dat[val, Y_val], mu = mu1)
-
+  
   if (!is.null(Y_unval)) {
     if (!nondiff_Y_unval) {
       mu2 <- data.matrix(cbind(1, dat[val, c(X_unval, Y_val, X_val, addl_covar)])) %*% matrix(gamma_Ystar, ncol = 1)
@@ -64,7 +64,7 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
     }
     pYstar <- prob_logistic(y = dat[val, Y_unval], mu = mu2)
   } else { pYstar <- rep(1, length(pY)) }
-
+  
   if (!is.null(X_unval)) {
     if (!nondiff_X_unval) {
       mu3 <- data.matrix(cbind(1, dat[val, c(Y_val, X_val, addl_covar)])) %*% matrix(gamma_Xstar, ncol = 1)
@@ -73,15 +73,15 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
     }
     pXstar <- prob_logistic(y = dat[val, X_unval], mu = mu3)
   } else { pXstar <- rep(1, length(pY)) }
-
+  
   mu4 <- data.matrix(cbind(1, dat[val, c(addl_covar)])) %*% matrix(gamma_X, ncol = 1)
   pX <- prob_logistic(y = dat[val, X_val], mu = mu4)
-
+  
   l <- sum(log(pYstar) + log(pXstar) + log(pY) + log(pX))
-
+  
   # Unvalidated subjects ---------------------------------------------------------------------
   unval <- which(as.numeric(dat[, Validated]) == 0)
-
+  
   # Create complete dataset ------------------------------------------------------------------
   if (!is.null(X_unval)) {
     X_val_unique <- data.frame(unique(dat[val, X_val]))
@@ -92,15 +92,15 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
     cd_unval <- dat[unval, ]
     m <- 1
   }
-
+  
   if (!is.null(Y_unval)) {
     cd_unval <- rbind(cd_unval, cd_unval)
     cd_unval[, Y_val] <- rep(c(0, 1), each = ((N - n) * m))
   }
-
+  
   mu1 <- data.matrix(cbind(1, cd_unval[, c(addl_covar, X_val)])) %*% matrix(c(alpha, beta), ncol = 1)
   pY <- prob_logistic(y = cd_unval[, Y_val], mu = mu1)
-
+  
   if (!is.null(Y_unval)) {
     if (!nondiff_Y_unval) {
       mu2 <- data.matrix(cbind(1, cd_unval[, c(X_unval, Y_val, X_val, addl_covar)])) %*% matrix(gamma_Ystar, ncol = 1)
@@ -109,7 +109,7 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
     }
     pYstar <- prob_logistic(y = cd_unval[, Y_unval], mu = mu2)
   } else { pYstar <- rep(1, length(pY)) }
-
+  
   if (!is.null(X_unval)) {
     if (!nondiff_X_unval) {
       mu3 <- data.matrix(cbind(1, cd_unval[, c(Y_val, X_val, addl_covar)])) %*% matrix(gamma_Xstar, ncol = 1)
@@ -118,11 +118,11 @@ od_loglik <- function(params, dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL,
     }
     pXstar <- prob_logistic(y = cd_unval[, X_unval], mu = mu3)
   } else { pXstar <- rep(1, length(pY)) }
-
+  
   mu4 <- data.matrix(cbind(1, cd_unval[, c(addl_covar)])) %*% matrix(gamma_X, ncol = 1)
   pX <- prob_logistic(y = cd_unval[, X_val], mu = mu4)
-
+  
   l <- l + sum(log(rowsum(x = pY * pYstar * pXstar * pX, group = cd_unval[, "id"])))
-
+  
   if (for_nlm) { return(- l) } else { return(l) }
 }
