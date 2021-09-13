@@ -18,7 +18,7 @@ Inside the `simulations` subdirectory, you will find the following:
 
   - `YXboth_SimSetup.R`: simulations with outcome and exposure misclassification, defining sampling strata on error-prone outcome and exposure, Y* and X* (Table 1 in the Manuscript)
   - `YXboth_inclZ_SimSetup.R`: simulations with outcome and exposure misclassification, defining sampling strata on error-prone outcome and exposure, Y* and X*, and error-free binary covariate Z (Table S2 in the Supplemental Materials for the Manuscript).
-  - `YXboth_inclZ_misspec_SimSetup.R`: 
+  - `YXboth_inclZ_misspec_SimSetup.R`:  simulations considering model misspecification at the design stage (Table 2 in the Manuscript).
   - `Yonly_SimSetup.R`: simulations with outcome misclassification alone, defining sampling strata on error-prone outcome Y* and error-free exposure X (top of Table S3 in the Supplemental Materials for the Manuscript).
   - `Xonly_SimSetup.R`: simulations with exposure misclassification alone, defining sampling strata on error-free outcome Y and error-prone exposure X* (top of Table S3 in the Supplemental Materials for the Manuscript).
 
