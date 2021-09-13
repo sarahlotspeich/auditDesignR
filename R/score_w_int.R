@@ -1,3 +1,22 @@
+#' Score vectors for measurement error setting with errors in outcome + exposure (with interaction)
+#' @name score_int
+#' @param comp_dat Dataframe with complete data.
+#' @param Y_unval Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).
+#' @param Y_val Column with the validated outcome (can be name or numeric index).
+#' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index). If covariates are error-free, \code{X_unval = NULL} (DEFAULT).
+#' @param X_val Column(s) with the validated predictors (can be name or numeric index).
+#' @param addl_covar Column(s) with additional error-free covariates (can be name or numeric index).
+#' @param Validated Columns with the validation indicator (can be name or numeric index).
+#' @param nondiff_Y_unval If \code{TRUE}, misclassification in \code{Y_unval} is assumed to be nondifferential, i.e., independent of \code{X_val} and \code{X_unval}. Default is \code{FALSE}.
+#' @param nondiff_X_unval If \code{TRUE}, misclassification in \code{X_unval} is assumed to be nondifferential, i.e., independent of \code{Y_val}. Default is \code{FALSE}.
+#' @param int_Y_unval If \code{TRUE}, misclassification model for \code{Y_unval} includes \code{interact}. Default is \code{FALSE}.
+#' @param int_Y_val If \code{TRUE}, model for \code{Y_val} includes \code{interact}. Default is \code{FALSE}.
+#' @param int_X_unval If \code{TRUE}, misclassification model for \code{X_unval} includes \code{interact}. Default is \code{FALSE}.
+#' @param int_X_val If \code{TRUE}, model for \code{X_val} includes \code{interact}. Default is \code{FALSE}.
+#' @param beta Parameter value for the log odds ratio of \code{X_val} on \code{Y_val}.
+#' @param eta Parameter values for other nuisance parameters.
+#' @return Matrix with one column for the score vector for each parameter \code{beta}, \code{eta}.
+#' @export
 score_w_int <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, 
                         nondiff_Y_unval = FALSE, nondiff_X_unval = FALSE, beta, eta,
                         int_Y_val = FALSE, int_Y_unval = FALSE, int_X_val = FALSE, int_X_unval = FALSE) {

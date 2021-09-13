@@ -1,14 +1,15 @@
-#' Maximum likelihood estimator (MLE) for logistic regression with errors in binary outcome + exposure
-#' @name twophase_mle
+#' Maximum likelihood estimator for logistic regression with errors in binary outcome + exposure (with interaction)
+#' @name twophase_mle_interact
 #' @param dat Data containing all columns referenced in \code{Y_unval}, \code{Y_val}, \code{X_unval}, \code{X_val}, \code{addl_covar}, and \code{Validated}.
 #' @param Y_unval Column with the unvalidated outcome (can be name or numeric index). If outcome is error-free, \code{Y_unval = NULL} (DEFAULT).
 #' @param Y_val Column with the validated outcome (can be name or numeric index).
 #' @param X_unval Column(s) with the unvalidated predictors (can be name or numeric index). If covariates are error-free, \code{X_unval = NULL} (DEFAULT).
 #' @param X_val Column(s) with the validated predictors (can be name or numeric index).
-#' @param addl_covar Column(s) with additional error-free covariates (can be name or numeric index).
+#' @param addl_covar Column(s) with additional error-free covariates (can be name or numeric index). Default is \code{NULL}.
+#' @param interact Column(s) with interaction term(s) (can be name or numeric index). Default is \code{NULL}.
 #' @param Validated Columns with the validation indicator (can be name or numeric index).
-#' @param nondiff_Y_unval If \code{TRUE}, misclassification in \code{Y_unval} is assumed to be nondifferential, i.e., independent of \code{X_val} and \code{X_unval}. Default is \code{FALSE}.
-#' @param nondiff_X_unval If \code{TRUE}, misclassification in \code{X_unval} is assumed to be nondifferential, i.e., independent of \code{Y_val}. Default is \code{FALSE}.
+#' @param int_Y_unval If \code{TRUE}, misclassification model for \code{Y_unval} includes \code{interact}. Default is \code{FALSE}.
+#' @param int_X_unval If \code{TRUE}, misclassification model for \code{X_unval} includes \code{interact}. Default is \code{FALSE}.
 #' @param noSE If \code{TRUE}, standard errors are calculated by inverting the hessian at convergence. Default is \code{FALSE}.
 #' @return List of dataframes with model coefficients.
 #' \item{mod_Y_unval}{Outcome misclassification model coefficients}
@@ -17,23 +18,23 @@
 #' \item{mod_X_val}{Exposure model coefficients}
 #' \item{conv}{\code{TRUE}/\code{FALSE} for convergence}
 #' @export
-twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, Validated, nondiff_Y_unval = FALSE, nondiff_X_unval = FALSE, noSE = FALSE) {
+twophase_mle_int <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_covar = NULL, interact = NULL, Validated, int_Y_unval = FALSE, int_X_unval = FALSE, noSE = FALSE) {
   
   if (!is.null(Y_unval)) {
-    if (!nondiff_Y_unval) {
-      params_Y_unval <- c("(Intercept)", X_unval, Y_val, X_val, addl_covar)
+    if (int_Y_unval) {
+      params_Y_unval <- c("(Intercept)", X_unval, Y_val, X_val, addl_covar, interact)
     } else {
-      params_Y_unval <- c("(Intercept)", Y_val, addl_covar)
+      params_Y_unval <- c("(Intercept)", X_unval, Y_val, X_val, addl_covar) 
     }
   } else {
     params_Y_unval <- NULL
   }
   
   if (!is.null(X_unval)) {
-    if (!nondiff_X_unval) {
-      params_X_unval <- c("(Intercept)", Y_val, X_val, addl_covar)
+    if (int_X_unval) {
+      params_X_unval <- c("(Intercept)", Y_val, X_val, addl_covar, interact)  
     } else {
-      params_X_unval <- c("(Intercept)", X_val, addl_covar)
+      params_X_unval <- c("(Intercept)", Y_val, X_val, addl_covar)
     }
   } else {
     params_X_unval <- NULL
@@ -43,7 +44,9 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
   params_X_val <- c("(Intercept)", addl_covar)
   
   suppressWarnings(
-    fit <- nlm(f = od_loglik,
+    fit <- nlm(f = od_loglik_w_int,
+               p = rep(0, length(c(beta, eta_int))),
+               dat = cbind(V = V_optMLE, sim_dat),
                p = rep(0, length(c(params_Y_unval, params_X_unval, params_Y_val, params_X_val))),
                dat = dat,
                Y_val = Y_val,
@@ -51,12 +54,15 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
                X_val = X_val,
                X_unval = X_unval,
                addl_covar = addl_covar,
+               interact = interact,
                Validated = Validated,
-               nondiff_X_unval = nondiff_X_unval,
-               nondiff_Y_unval = nondiff_Y_unval,
+               int_Y_unval = int_Y_unval, 
+               int_X_unval = int_X_unval,
                iterlim = 250,
-               hessian = !noSE)
+               steptol = 1E-4,
+               Validated = Validated)
   )
+  
   SE <- tryCatch(expr = sqrt(diag(solve(fit))),  error = function(err) {NA})
   conv <- fit$code <= 2
   if (conv) {
