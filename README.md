@@ -1,6 +1,6 @@
 # Optimal Multi-Wave Validation for Secondary Use Data with Outcome and Exposure Misclassification
 ## Lotspeich, Amorim, Shaw, Tao, and Shepherd
-The complete R package `auditDesignR` and code for the simulation settings included in the paper. See the [preprint](https://arxiv.org/abs/2108.13263) for more details.
+The complete R package `auditDesignR` and code for the simulation settings included in the [paper](https://arxiv.org/abs/2108.13263).
 
 ### Install
 To install the package, run the following in your `R` console: `devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")`.
@@ -21,3 +21,8 @@ Inside the `simulations` subdirectory, you will find the following:
   - `YXboth_inclZ_misspec_SimSetup.R`: 
   - `Yonly_SimSetup.R`: simulations with outcome misclassification alone, defining sampling strata on error-prone outcome Y* and error-free exposure X (top of Table S3 in the Supplemental Materials for the Manuscript).
   - `Xonly_SimSetup.R`: simulations with exposure misclassification alone, defining sampling strata on error-free outcome Y and error-prone exposure X* (top of Table S3 in the Supplemental Materials for the Manuscript).
+
+See the [preprint](https://arxiv.org/abs/2108.13263) for more details.
+
+### Example data
+Example datasets for numerous error settings can be found in `data`.
