@@ -41,7 +41,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
   
   params_Y_val <- c("(Intercept)", addl_covar, X_val)
   params_X_val <- c("(Intercept)", addl_covar)
-  
+  tic("nlm")
+  # nlm takes up almost all the runtime of this function
   suppressWarnings(
     fit <- nlm(f = od_loglik,
                p = rep(0, length(c(params_Y_unval, params_X_unval, params_Y_val, params_X_val))),
@@ -57,6 +58,7 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
                iterlim = 250,
                hessian = !noSE)
   )
+  toc()
   SE <- tryCatch(expr = sqrt(diag(solve(fit))),  error = function(err) {NA})
   conv <- fit$code <= 2
   if (conv) {
