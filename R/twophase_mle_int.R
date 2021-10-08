@@ -43,6 +43,10 @@ twophase_mle_int <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, 
   params_Y_val <- c("(Intercept)", addl_covar, X_val)
   params_X_val <- c("(Intercept)", addl_covar)
   
+  # twophase_mle_int: no visible global function definition for 'nlm'
+  # twophase_mle_int: no visible binding for global variable 'eta_int'
+  # twophase_mle_int: no visible binding for global variable 'V_optMLE'
+  # twophase_mle_int: no visible binding for global variable 'sim_dat'
   suppressWarnings(
     fit <- nlm(f = od_loglik_w_int,
                p = rep(0, length(c(beta, eta_int))),

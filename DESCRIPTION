@@ -16,3 +16,5 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+# Note: consider changing license later
+License: MIT + file LICENSE 
