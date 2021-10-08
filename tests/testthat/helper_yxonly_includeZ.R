@@ -1,6 +1,13 @@
 library(testthat)
 library(auditDesignR)
 
+# should we skip tests taking more than 3 mins?
+SKIP_LONG_TESTS <- TRUE
+
+# should we skip tests taking more than 1 min?
+SKIP_MEDIUM_TESTS <- FALSE
+
+
 # Set sample sizes ----------------------------------------
 N <- 10000 # Phase-I = N
 n <- 400 # Phase-II/audit size = n
