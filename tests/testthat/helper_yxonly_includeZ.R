@@ -4,7 +4,7 @@ library(auditDesignR)
 # should we skip tests taking more than 3 mins?
 SKIP_LONG_TESTS <- TRUE
 
-# should we skip tests taking more than 1 min?
+# should we skip tests taking more than 1 min and less than 3 mins?
 SKIP_MEDIUM_TESTS <- FALSE
 
 
