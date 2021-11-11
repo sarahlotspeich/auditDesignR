@@ -196,5 +196,6 @@ score <- function(comp_dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl_c
   Si_theta <- rbind(cbind(Si_theta_v, joint_exV = joint_v),
                     cbind(Si_theta_uv, joint_exV = phI_joint_uv))
 
+
   return(Si_theta)
 }

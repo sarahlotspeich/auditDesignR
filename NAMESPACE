@@ -22,3 +22,7 @@ export(twophase_mle_int)
 export(var_by_row)
 export(var_formula)
 export(visualize_grid)
+
+importFrom("graphics", "grid")
+importFrom("stats", "nlm")
+importFrom("utils", "stack")

@@ -1,9 +1,12 @@
+library(ggplot2)
+
 #' Creates a graphic representation of the input adaptive grid search
 #' @name visualize_grid
 #' @param grid_search \code{List} object returned from \code{optMLE_grid()} with option \code{return_full_grid = TRUE}.
 #' @return
 #' @export
 visualize_grid <- function(grid_search) {
+
   opt_long <- grid_search$all_opt[, c("grid", "audit_step", grep("n", colnames(grid_search$all_opt), value = TRUE))]
 
   num_strat <- length(grep("n", colnames(grid_search$all_opt), value = TRUE))

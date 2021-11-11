@@ -4,5 +4,6 @@
 #' @name prob_logistic
 #' @export
 prob_logistic <- function(y, mu) {
+
   return(y * sigmoid(mu) + (1 - y) * (1 - sigmoid(mu)))
 }

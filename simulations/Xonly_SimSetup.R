@@ -3,8 +3,9 @@
 ###########################################################
 
 #Run once: devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")
-library(auditDesignR)
-
+# library(auditDesignR)
+R.utils::sourceDirectory("R/")
+tic("xonly")
 # Set sample sizes ----------------------------------------
 N <- 10000 # Phase-I = N
 n <- 400 # Phase-II/audit size = n
@@ -16,17 +17,17 @@ eta <- vector() # Nuisance parameters eta
 
 # True parameter values for P(Y|X) --------------------------
 pY <- 0.3
-eta[1] <- log(pY / (1 - pY)) 
+eta[1] <- log(pY / (1 - pY))
 beta <- 0.3
 
 # True parameter value for P(X) -----------------------------
-pX <- 0.1 
-eta[5] <- log(pX / (1 - pX)) 
+pX <- 0.1
+eta[5] <- log(pX / (1 - pX))
 
 # Parameters for error model P(X*|X,Y) ----------------------
-eta[2] <- - log((1 - fpr_Xstar) / fpr_Xstar) 
-eta[3] <- - log((1 - tpr_Xstar) / tpr_Xstar) - eta[2] 
-eta[4] <- (beta + 0.15) 
+eta[2] <- - log((1 - fpr_Xstar) / fpr_Xstar)
+eta[3] <- - log((1 - tpr_Xstar) / tpr_Xstar) - eta[2]
+eta[4] <- (beta + 0.15)
 
 set.seed(918)
 
@@ -46,17 +47,17 @@ N10 <- table(Y, Xstar)[2,1]
 N11 <- table(Y, Xstar)[2,2]
 stratN <- list(N00 = N00, N01 = N01, N10 = N10, N11 = N11)
 
-# Design 1: SRS 
+# Design 1: SRS
 V_srs <- sample_srs(phI = N, phII = n)
 mle_srs <- twophase_mle(dat = cbind(V = V_srs, sim_dat), Y_val = "Y", Y_unval = NULL, X_val = "X", X_unval = "Xstar", Validated = "V")
 beta_srs <- mle_srs$mod_Y_val$Est[2]
 
-# Design 2: CC* 
+# Design 2: CC*
 V_cc <- sample_cc(dat = sim_dat, phI = N, phII = n, sample_on = "Y")
 mle_cc <- twophase_mle(dat = cbind(V = V_cc, sim_dat), Y_val = "Y", Y_unval = NULL, X_val = "X", X_unval = "Xstar", Validated = "V")
 beta_cc <- mle_cc$mod_Y_val$Est[2]
 
-# Design 3: BCC* 
+# Design 3: BCC*
 V_bcc <- sample_bcc(dat = sim_dat, phI = N, phII = n, sample_on = c("Y", "Xstar"))
 mle_bcc <- twophase_mle(dat = cbind(V = V_bcc, sim_dat), Y_val = "Y", Y_unval = NULL, X_val = "X", X_unval = "Xstar", Validated = "V")
 beta_bcc <- mle_bcc$mod_Y_val$Est[2]
@@ -68,7 +69,7 @@ if (grid_search$findOptimal) {
   V_optMLE <- sample_optMLE(dat = sim_dat, sample_on = c("Y", "Xstar"), des = opt_des)
   mle_optMLE <- twophase_mle(dat = cbind(V = V_optMLE, sim_dat), Y_val = "Y", Y_unval = NULL, X_val = "X", X_unval = "Xstar", Validated = "V")
   beta_optMLE <- mle_optMLE$mod_Y_val$Est[2]
-} 
+}
 
 # Design 5: optMLE-2
 V_wave1 <- sample_bcc(dat = sim_dat, phI = N, phII = (n / 2), sample_on = c("Y", "Xstar"))
@@ -87,4 +88,7 @@ if (grid_search$findOptimal) {
   V_optMLE2 <- pmax(V_wave1, sample_optMLE(dat = cbind(V = V_wave1, sim_dat), sample_on = c("Y", "Xstar"), des = opt_des2, wave1_Validated = "V"))
   mle_optMLE2 <- twophase_mle(dat = cbind(V = V_optMLE2, sim_dat), Y_val = "Y", Y_unval = NULL, X_val = "X", X_unval = "Xstar", Validated = "V")
   beta_optMLE2 <- mle_optMLE2$mod_Y_val$Est[2]
-} 
+}
+toc()
+
+# 123.42
