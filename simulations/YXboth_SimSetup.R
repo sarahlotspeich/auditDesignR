@@ -61,7 +61,7 @@ mle_srs <- twophase_mle(dat = cbind(V = V_srs, sim_dat),
                         Validated = "V")
 beta_srs <- mle_srs$mod_Y_val$Est[2]
 
-# Design 2: CC* 
+# Design 2: CC* ---------------------------------------------
 V_cc <- sample_cc(dat = sim_dat, 
                   phI = N, 
                   phII = n, 
@@ -74,7 +74,7 @@ mle_cc <- twophase_mle(dat = cbind(V = V_cc, sim_dat),
                        Validated = "V")
 beta_cc <- mle_cc$mod_Y_val$Est[2]
 
-# Design 3: BCC* 
+# Design 3: BCC* ---------------------------------------------
 V_bcc <- sample_bcc(dat = sim_dat, 
                     phI = N, 
                     phII = n, 
@@ -87,7 +87,7 @@ mle_bcc <- twophase_mle(dat = cbind(V = V_bcc, sim_dat),
                         Validated = "V")
 beta_bcc <- mle_bcc$mod_Y_val$Est[2]
 
-# Design 4: optMLE
+# Design 4: optMLE -------------------------------------------
 ## Construct complete data and calculate score vectors for each 
 complete_data <- expand.grid(Y = c(0, 1), 
                              X = c(0, 1), 
@@ -125,7 +125,7 @@ if (grid_search$findOptimal) {
   beta_optMLE <- mle_optMLE$mod_Y_val$Est[2]
 } 
 
-# Design 5: optMLE-2
+# Design 5: optMLE-2 ------------------------------------------
 ## Wave 1 (na = n / 2)
 V_wave1 <- sample_bcc(dat = sim_dat, 
                       phI = N, 
@@ -171,7 +171,7 @@ if (grid_search$findOptimal) {
   beta_optMLE2 <- mle_wave2$mod_Y_val$Est[2]
 } 
 
-# Design 6: optMLE-3
+# Design 6: optMLE-3 ------------------------------------------
 ## Wave 1 (na = n / 2)
 V_wave1 <- sample_bcc(dat = sim_dat, 
                       phI = N, 
