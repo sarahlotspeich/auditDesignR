@@ -6,7 +6,7 @@
 #' @param num_steps Character option for how many steps to be returned, options include \code{"smallest"} and \code{"all"}. DEFAULT is \code{"smallest"}.
 #' @param prev_grid_des If grid > 1, the audit from the previous iteration that was optimal.
 #' @param prev_grid_delta If grid > 1, the step size from the previous iteration.
-#' @param max_grid_size Integer maxium for the largest grids that will be searched.
+#' @param max_grid_size Integer maximum for the largest grids that will be searched.
 #' @return An integer.
 #' @export
 suggest_step <- function(phII, phI_strat, min_n, num_strat, num_steps = "smallest", prev_grid_des, prev_delta, max_grid_size) {

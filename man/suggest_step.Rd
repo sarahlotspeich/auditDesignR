@@ -26,7 +26,7 @@ suggest_step(
 
 \item{prev_grid_des}{If grid > 1, the audit from the previous iteration that was optimal.}
 
-\item{max_grid_size}{Integer maxium for the largest grids that will be searched.}
+\item{max_grid_size}{Integer maximum for the largest grids that will be searched.}
 
 \item{prev_grid_delta}{If grid > 1, the step size from the previous iteration.}
 }
