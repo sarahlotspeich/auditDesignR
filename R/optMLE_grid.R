@@ -57,7 +57,12 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     return(warning("Invalid grid values - sampling more than available."))
   }
 
-  grid$Vbeta <- apply(X = grid, MARGIN = 1, FUN = var_by_row, phI = phI, indiv_score = indiv_score, sample_on = sample_on)
+  grid$Vbeta <- apply(X = grid, 
+                      MARGIN = 1, 
+                      FUN = var_by_row, 
+                      phI = phI, 
+                      indiv_score = indiv_score, 
+                      sample_on = sample_on)
   min_var <- min(grid$Vbeta)
 
   if (is.na(min_var)) {
