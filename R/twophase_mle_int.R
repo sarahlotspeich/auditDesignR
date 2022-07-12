@@ -45,8 +45,6 @@ twophase_mle_int <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, 
   
   suppressWarnings(
     fit <- nlm(f = od_loglik_w_int,
-               p = rep(0, length(c(beta, eta_int))),
-               dat = cbind(V = V_optMLE, sim_dat),
                p = rep(0, length(c(params_Y_unval, params_X_unval, params_Y_val, params_X_val))),
                dat = dat,
                Y_val = Y_val,
