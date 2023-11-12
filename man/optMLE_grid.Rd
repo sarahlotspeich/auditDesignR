@@ -14,7 +14,8 @@ optMLE_grid(
   steps = NULL,
   indiv_score,
   return_full_grid = FALSE,
-  max_grid_size = 10000
+  max_grid_size = 10000,
+  stop_when = "step_size"
 )
 }
 \arguments{
@@ -24,7 +25,7 @@ optMLE_grid(
 
 \item{phI_strat}{Phase I stratum sample sizes as a named list, dataframe, or vector}
 
-\item{phIIa_strat}{For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector Default is \code{NULL}.}
+\item{phIIa_strat}{For multi-wave designs, Phase II(a) stratum sample sizes as a named list, dataframe, or vector. Default is \code{NULL}, assuming a single-wave design.}
 
 \item{min_n}{Minimum stratum size to be sampled.}
 
@@ -34,9 +35,11 @@ optMLE_grid(
 
 \item{indiv_score}{Matrix of score vectors for all parameters (returned from the \code{score} function.}
 
-\item{return_full_grid}{If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
+\item{return_full_grid}{(Optional) If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.}
 
-\item{max_grid_size}{Integer maxium for the largest grids that will be searched.}
+\item{max_grid_size}{Integer maximum for the largest grids that will be searched.}
+
+\item{stop_when}{(Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1\\%.}
 }
 \value{
 \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
