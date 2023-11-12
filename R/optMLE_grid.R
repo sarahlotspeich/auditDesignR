@@ -52,7 +52,14 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   it <- 1
 
   # Run initial grid search
-  grid <- build_grid(delta = audit_steps[it], phi = phi, num_strat = num_strat, phI_strat = phI_strat, phIIa_strat = phIIa_strat, min_n = min_n, prev_grid_des = NULL, prev_delta = NULL)
+  grid <- build_grid(delta = audit_steps[it], 
+                     phi = phi, 
+                     num_strat = num_strat,
+                     phI_strat = phI_strat, 
+                     phIIa_strat = phIIa_strat, 
+                     min_n = min_n, 
+                     prev_grid_des = NULL, 
+                     prev_delta = NULL)
 
   if (any(grid[, grep("pi", colnames(grid))] > 1)) {
     return(warning("Invalid grid values - sampling more than available."))
@@ -85,7 +92,10 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   # Check for a clear minimum
   min_var_design <- prev_min <- grid[grid$Vbeta == min_var, ]
   all_opt_des <- rbind(all_opt_des,
-                       cbind(grid = 1, audit_step = NA, min_var_design, grid_size = nrow(grid)))
+                       cbind(grid = 1, 
+                             audit_step = audit_steps[it], 
+                             min_var_design, 
+                             grid_size = nrow(grid)))
 
   # Create dataframe to store all designs
   if (return_full_grid) { all_grids <- cbind(grid = 1, grid) }
@@ -119,7 +129,13 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     # Initial audit step size
     if (is.null(steps)) {
       audit_steps <- append(audit_steps,
-                            suggest_step(phII = phII, phI_strat = phI_strat, min_n = min_n, num_strat = num_strat, prev_grid_des = prev_grid_des, prev_delta = audit_steps[(it - 1)], max_grid_size = max_grid_size))
+                            suggest_step(phII = phII, 
+                                         phI_strat = phI_strat, 
+                                         min_n = min_n, 
+                                         num_strat = num_strat, 
+                                         prev_grid_des = prev_grid_des, 
+                                         prev_delta = audit_steps[(it - 1)], 
+                                         max_grid_size = max_grid_size))
     }
 
     if (any(audit_steps == 9999)) {
@@ -178,9 +194,9 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
     # Check for a unique "best" design from current iteration
     findOptimal <- sum(grid$Vbeta == min_var) == 1 & (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) < 1E-8
     uniqueMinimum <- sum(grid$Vbeta == min_var) == 1
-    monotoneDecreasing <- (min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) > 1E-8
-    auditSize <- rowSums(min_var_design) > phII
-    findOptimal <- uniqueMinimum & monotoneDecreasing & auditSize
+    #monotoneDecreasing <- abs(min_var - all_opt_des$Vbeta[nrow(all_opt_des)]) <= 1E-8
+    # auditSize <- rowSums(min_var_design) > phII
+    findOptimal <- uniqueMinimum #& auditSize & monotoneDecreasing 
 
     # Depending on stopping rule, decide whether to keep going or terminate search.
     if (findOptimal) {
