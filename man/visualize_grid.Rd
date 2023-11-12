@@ -9,9 +9,6 @@ visualize_grid(grid_search)
 \arguments{
 \item{grid_search}{\code{List} object returned from \code{optMLE_grid()} with option \code{return_full_grid = TRUE}.}
 }
-\value{
-
-}
 \description{
 Creates a graphic representation of the input adaptive grid search
 }
