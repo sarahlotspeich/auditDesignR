@@ -10,7 +10,7 @@
 #' @param indiv_score Matrix of score vectors for all parameters (returned from the \code{score} function.
 #' @param return_full_grid (Optional) If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
 #' @param max_grid_size Integer maximum for the largest grids that will be searched.
-#' @param stop_when (Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1\%.
+#' @param stop_when (Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1 percent.
 #' @return
 #' \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
 #' \item{min_var}{Value of the variance achieved by the optimal design in the last iteration.}

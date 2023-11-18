@@ -39,7 +39,7 @@ optMLE_grid(
 
 \item{max_grid_size}{Integer maximum for the largest grids that will be searched.}
 
-\item{stop_when}{(Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1\\%.}
+\item{stop_when}{(Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1 percent.}
 }
 \value{
 \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
