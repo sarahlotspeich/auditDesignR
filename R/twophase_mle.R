@@ -70,8 +70,8 @@ twophase_mle <- function(dat, Y_val, Y_unval = NULL, X_val, X_unval = NULL, addl
     SE_eta <- SE_eta[-c(1:(1 + length(addl_covar)))]
     
     coeff_Y_val <- data.frame(Coeff = params_Y_val,
-                              Est = c(alpha[1], beta, alpha[-1]),
-                              SE = c(SE_alpha[1], SE_beta, SE_alpha[-1]),
+                              Est = c(alpha, beta),
+                              SE = c(SE_alpha, SE_beta),
                               stringsAsFactors = FALSE)
     
     # Parameters P(Y_unval|X_unval, Y_val, X_val, addl_covar)
