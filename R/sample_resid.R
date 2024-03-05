@@ -28,9 +28,23 @@ sample_resid <- function(formula, family, dat, phI, phII) {
     r = as.vector(fit$y - exp(mu))  
   }
   
-  smallest_resid = which(order(r, decreasing = FALSE) <= phII / 2) ## only validate smallest n/2 residuals
-  largest_resid = which(order(r, decreasing = TRUE) <= phII / 2) ## ... and largest n/2 
-
+  resid_id = data.frame(id = 1:phI, 
+                        resid = r)
+  
+  ## Order ascendingly by residuals
+  resid_id = resid_id[order(resid_id$resid, decreasing = FALSE), ]
+  ### Only validate smallest n/2 residuals
+  smallest_resid = resid_id$id[1:(phII / 2)]
+  
+  ## Re-order descendingly by residuals
+  resid_id = resid_id[order(resid_id$resid, decreasing = TRUE), ]
+  ### Only validate smallest n/2 residuals
+  largest_resid = resid_id$id[1:(phII / 2)]
+  
+  ## Put order back to by id
+  resid_id = resid_id[order(resid_id$id, decreasing = FALSE), ]
+  
+  ## Return validation indicator
   V_resid = as.numeric(seq(1, phI) %in% c(smallest_resid, largest_resid))
   return(V_resid)
 }
