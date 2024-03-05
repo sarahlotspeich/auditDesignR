@@ -31,9 +31,21 @@ sample_sfs <- function(formula, family, dat, phI, phII, X) {
   
   ## Multiply residuals by X 
   sf = r * dat[, X]
-  smallest_sf = which(order(sf, decreasing = FALSE) <= phII / 2) ## only validate smallest n/2 residuals
-  largest_sf = which(order(sf, decreasing = TRUE) <= phII / 2) ## ... and largest n/2 
-
+  
+  sf_id = data.frame(id = 1:phI, 
+                     sf = sf)
+  
+  ## Order ascendingly by residuals
+  sf_id = sf_id[order(sf_id$sf, decreasing = FALSE), ]
+  ### Only validate smallest n/2 residuals
+  smallest_sf = sf_id$id[1:(phII / 2)]
+  
+  ## Re-order descendingly by residuals
+  sf_id = sf_id[order(sf_id$sf, decreasing = TRUE), ]
+  ### Only validate smallest n/2 residuals
+  largest_sf = sf_id$id[1:(phII / 2)]
+  
+  ## Return validation indicator
   V_sfs = as.numeric(seq(1, phI) %in% c(smallest_sf, largest_sf))
   return(V_sfs)
 }
