@@ -4,7 +4,7 @@
   <h2>Lotspeich, Amorim, Shaw, Tao, and Shepherd</h2>
 </p>
 
-The complete R package `auditDesignR` and code for the simulation settings included in the [paper](https://arxiv.org/abs/2108.13263).
+The complete R package `auditDesignR` and code for the simulation settings included in the [paper](https://arxiv.org/abs/2108.13263). Art for the hex sticker was made with the help of Dall-E 3. 
 
 ### Install
 To install the package, run the following in your `R` console: `devtools::install_github("sarahlotspeich/auditDesignR", ref = "main")`.
