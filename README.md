@@ -1,5 +1,9 @@
-# Optimal Multi-Wave Validation for Secondary Use Data with Outcome and Exposure Misclassification
-## Lotspeich, Amorim, Shaw, Tao, and Shepherd
+<p style="display:inline-block;">
+  <img src="hex.png" width="200" title="a magnifying glass looking into a laptop and seeing medical charts">
+  <h1>Optimal Multi-Wave Validation for Secondary Use Data with Outcome and Exposure Misclassification</h1>
+  <h2>Lotspeich, Amorim, Shaw, Tao, and Shepherd</h2>
+</p>
+
 The complete R package `auditDesignR` and code for the simulation settings included in the [paper](https://arxiv.org/abs/2108.13263).
 
 ### Install
