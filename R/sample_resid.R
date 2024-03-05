@@ -41,9 +41,6 @@ sample_resid <- function(formula, family, dat, phI, phII) {
   ### Only validate smallest n/2 residuals
   largest_resid = resid_id$id[1:(phII / 2)]
   
-  ## Put order back to by id
-  resid_id = resid_id[order(resid_id$id, decreasing = FALSE), ]
-  
   ## Return validation indicator
   V_resid = as.numeric(seq(1, phI) %in% c(smallest_resid, largest_resid))
   return(V_resid)
