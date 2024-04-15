@@ -22,7 +22,14 @@ suggest_step <- function(phII, phI_strat, min_n, num_strat, num_steps = "smalles
     gcd <- max(seq(1, (gcd - 1))[gcd %% seq(1, (gcd - 1)) == 0])
   }
   steps <- c(steps, 1)
-  small_enough <- steps[sapply(X = steps, FUN = grid_size, phi = phi, num_strat = num_strat, phI_strat = phI_strat, prev_grid_des = NULL, prev_delta = NULL) < max_grid_size]
+  grid_size_steps <- sapply(X = steps, 
+                            FUN = grid_size, 
+                            phi = phi,
+                            num_strat = num_strat, 
+                            phI_strat = phI_strat, 
+                            prev_grid_des = NULL, 
+                            prev_delta = NULL)
+  small_enough <- steps[grid_size_steps <= max_grid_size]
   first_step <- min(small_enough)
 
   if (is.null(prev_grid_des)) {
