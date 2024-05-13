@@ -4,7 +4,7 @@
 \alias{sample_sfs}
 \title{Sample score function sample audit based on naive model from Phase I variables.}
 \usage{
-sample_sfs(formula, family, dat, phI, phII, X)
+sample_sfs(formula, family, dat, phI, phII, X, absValue = FALSE)
 }
 \arguments{
 \item{formula}{Model formula used to calculate residuals, passed to \code{glm()}.}
@@ -18,6 +18,8 @@ sample_sfs(formula, family, dat, phI, phII, X)
 \item{phII}{Phase II sample size.}
 
 \item{X}{Column with the error-prone covariate incorporated into sampling (can be name or numeric index).}
+
+\item{absValue}{Logical, if \code{absValue = FALSE} (the default) the design is based on the weighted score functions, rather than their absolute values.}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.

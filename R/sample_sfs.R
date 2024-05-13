@@ -6,9 +6,10 @@
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
 #' @param X Column with the error-prone covariate incorporated into sampling (can be name or numeric index).
+#' @param absValue Logical, if \code{absValue = FALSE} (the default) the design is based on the weighted score functions, rather than their absolute values.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_sfs <- function(formula, family, dat, phI, phII, X) {
+sample_sfs <- function(formula, family, dat, phI, phII, X, absValue = FALSE) {
   ## Fit user-specified model
   fit = glm(formula = as.formula(formula), 
             family = family, 
@@ -36,12 +37,20 @@ sample_sfs <- function(formula, family, dat, phI, phII, X) {
                      sf = sf)
   
   ## Order ascendingly by residuals
-  sf_id = sf_id[order(sf_id$sf, decreasing = FALSE), ]
+  if (absValue) {
+    sf_id = sf_id[order(abs(sf_id$sf), decreasing = FALSE), ]
+  } else {
+    sf_id = sf_id[order(sf_id$sf, decreasing = FALSE), ]
+  }
   ### Only validate smallest n/2 residuals
   smallest_sf = sf_id$id[1:(phII / 2)]
   
   ## Re-order descendingly by residuals
-  sf_id = sf_id[order(sf_id$sf, decreasing = TRUE), ]
+  if(absValue) {
+    sf_id = sf_id[order(abs(sf_id$sf), decreasing = TRUE), ] 
+  } else {
+    sf_id = sf_id[order(sf_id$sf, decreasing = TRUE), ]  
+  }
   ### Only validate smallest n/2 residuals
   largest_sf = sf_id$id[1:(phII / 2)]
   
