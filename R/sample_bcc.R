@@ -4,12 +4,16 @@
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
 #' @param sample_on Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.
+#' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_bcc <- function(dat, phI, phII, sample_on) {
-
+sample_bcc <- function(dat, phI, phII, sample_on, wave1_Validated = NULL) {
+  if (length(wave1_Validated) == 0) {
+    wave1_Validated = rep(FALSE, phI)
+  }
+  
   # Cross-tabulate Phase I data (Y*)
-  phI_tab <- data.frame(table(dat[, sample_on]))
+  phI_tab <- data.frame(table(dat[!wave1_Validated, sample_on]))
   colnames(phI_tab)[1:length(sample_on)] <- sample_on
   colnames(phI_tab)[ncol(phI_tab)] <- "N"
   phI_tab$target <- pmin(floor(phII / nrow(phI_tab)), phI_tab$N)
@@ -33,7 +37,9 @@ sample_bcc <- function(dat, phI, phII, sample_on) {
 
   V <- vector()
   for (i in 1:nrow(phI_tab)) {
-    V <- append(V, sample(x = which(dat[, "strat"] == phI_tab[i, "strat"]), size = phI_tab[i, "target"], replace = F))
+    V <- append(V, sample(x = which(dat[, "strat"] == phI_tab[i, "strat"] & !wave1_Validated), 
+                          size = phI_tab[i, "target"],
+                          replace = F))
   }
 
   V <- as.numeric(seq(1, phI) %in% V[order(V)])

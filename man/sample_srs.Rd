@@ -4,12 +4,14 @@
 \alias{sample_srs}
 \title{Sample simple random sample (SRS) audit.}
 \usage{
-sample_srs(phI, phII)
+sample_srs(phI, phII, wave1_Validated = NULL)
 }
 \arguments{
 \item{phI}{Phase I sample size.}
 
 \item{phII}{Phase II sample size.}
+
+\item{wave1_Validated}{(For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.

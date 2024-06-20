@@ -4,7 +4,7 @@
 \alias{sample_bcc}
 \title{Sample unvalidated balanced case-control (BCC*) audit based on Phase I variables.}
 \usage{
-sample_bcc(dat, phI, phII, sample_on)
+sample_bcc(dat, phI, phII, sample_on, wave1_Validated = NULL)
 }
 \arguments{
 \item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
@@ -14,6 +14,8 @@ sample_bcc(dat, phI, phII, sample_on)
 \item{phII}{Phase II sample size.}
 
 \item{sample_on}{Columns with the Phase I variables (should be categorical) used for sampling strata (can be name or numeric index). Currently, sampling on up to 3 binary variables can be accommodated.}
+
+\item{wave1_Validated}{(For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.}
 }
 \value{
 A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.

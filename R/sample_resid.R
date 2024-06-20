@@ -5,9 +5,15 @@
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
+#' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_resid <- function(formula, family, dat, phI, phII) {
+sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL) {
+  ## If single wave, set wave1_validated = FALSE for all
+  if (length(wave1_Validated) == 0) {
+    wave1_Validated = rep(FALSE, phI)
+  }
+  
   ## Fit user-specified model
   fit = glm(formula = as.formula(formula), 
             family = family, 
@@ -30,6 +36,9 @@ sample_resid <- function(formula, family, dat, phI, phII) {
   
   resid_id = data.frame(id = 1:phI, 
                         resid = r)
+  
+  ## If multi-wave, remove residuals from observations that were already validated
+  resid_id = resid_id[!wave1_Validated, ]
   
   ## Order ascendingly by residuals
   resid_id = resid_id[order(resid_id$resid, decreasing = FALSE), ]

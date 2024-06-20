@@ -4,11 +4,16 @@
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
 #' @param sample_on Column with the Phase I outcome variable (should be categorical) used for sampling strata (can be name or numeric index).
+#' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_cc <- function(dat, phI, phII, sample_on) {
+sample_cc <- function(dat, phI, phII, sample_on, wave1_Validated = NULL) {
+  if (length(wave1_Validated) == 0) {
+    wave1_Validated = rep(FALSE, phI)
+  }
+  
   # Cross-tabulate Phase I data (Y*)
-  phI_tab <- data.frame(table(dat[, sample_on]))
+  phI_tab <- data.frame(table(dat[!wave1_Validated, sample_on]))
   colnames(phI_tab)[1] <- sample_on
   colnames(phI_tab)[2] <- "N"
   phI_tab$target <- pmin(floor(phII / nrow(phI_tab)), phI_tab$N)
@@ -24,7 +29,10 @@ sample_cc <- function(dat, phI, phII, sample_on) {
 
   V_cc <- vector()
   for (i in 1:nrow(phI_tab)) {
-    V_cc <- append(V_cc, sample(x = which(dat[, sample_on] == phI_tab[i, sample_on]), size = phI_tab[i, "target"], replace = F))
+    V_cc <- append(V_cc, 
+                   sample(x = which(dat[, sample_on] == phI_tab[i, sample_on] & !wave1_Validated), 
+                          size = phI_tab[i, "target"], 
+                          replace = F))
   }
 
   V_cc <- as.numeric(seq(1, phI) %in% V_cc[order(V_cc)])

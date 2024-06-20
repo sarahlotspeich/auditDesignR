@@ -7,9 +7,15 @@
 #' @param phII Phase II sample size.
 #' @param X Column with the error-prone covariate incorporated into sampling (can be name or numeric index).
 #' @param absValue Logical, if \code{absValue = FALSE} (the default) the design is based on the weighted score functions, rather than their absolute values.
+#' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_sfs <- function(formula, family, dat, phI, phII, X, absValue = FALSE) {
+sample_sfs <- function(formula, family, dat, phI, phII, X, absValue = FALSE, wave1_Validated = NULL) {
+  ## If single wave, set wave1_validated = FALSE for all
+  if (length(wave1_Validated) == 0) {
+    wave1_Validated = rep(FALSE, phI)
+  }
+  
   ## Fit user-specified model
   fit = glm(formula = as.formula(formula), 
             family = family, 
@@ -35,6 +41,9 @@ sample_sfs <- function(formula, family, dat, phI, phII, X, absValue = FALSE) {
   
   sf_id = data.frame(id = 1:phI, 
                      sf = sf)
+  
+  ## If multi-wave, remove residuals from observations that were already validated
+  sf_id = sf_id[!wave1_Validated, ]
   
   ## Order ascendingly by residuals
   if (absValue) {
