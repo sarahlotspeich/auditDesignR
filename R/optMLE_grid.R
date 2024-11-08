@@ -11,6 +11,7 @@
 #' @param return_full_grid (Optional) If \code{TRUE}, all audits from all iterations of the grid search will be return. Default is \code{FALSE}.
 #' @param max_grid_size Integer maximum for the largest grids that will be searched.
 #' @param stop_when (Optional) Criterion used to decide when to stop the grid search. Default is \code{"step_size"}, stopping when the grid is at a 1-person level, but other option is \code{"percent_change"}, stopping when the variances of successive optimal designs change by less than 1 percent.
+#' @param grid (Optional) User-built grid of potential designs, rather than building the grid internally. 
 #' @return
 #' \item{all_opt}{Optimal designs chosen in each iteration of the grid search.}
 #' \item{min_var}{Value of the variance achieved by the optimal design in the last iteration.}
@@ -19,7 +20,7 @@
 #' \item{full_grid_search}{If \code{return_full_grid} = TRUE, a dataframe containing all grids from ann iterations.}
 #' \item{message}{Result of the grid search, options include \code{"No valid grids"}, \code{"Singular information"}, \code{"Tie for minimum"}, \code{"Grid completed without finding minimum"}, \code{"Grid search successful"}.}
 #' @export
-optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_on, steps = NULL, indiv_score, return_full_grid = FALSE, max_grid_size = 10000, stop_when = "step_size") {
+optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_on, steps = NULL, indiv_score, return_full_grid = FALSE, max_grid_size = 10000, stop_when = "step_size", grid = NULL) {
   # Since each of the strata must have >= min_n subjects
   ## The number that can be optimally allocated between them is only phII - num_strat x min_n
   num_strat <- length(phI_strat)
@@ -58,15 +59,17 @@ optMLE_grid <- function(phI, phII, phI_strat, phIIa_strat = NULL, min_n, sample_
   it <- 1
 
   # Run initial grid search
-  grid <- build_grid(delta = audit_steps[it], 
-                     phi = phi, 
-                     num_strat = num_strat,
-                     phI_strat = phI_strat, 
-                     phIIa_strat = phIIa_strat, 
-                     min_n = min_n, 
-                     prev_grid_des = NULL, 
-                     prev_delta = NULL)
-
+  if (is.null(grid)) {
+    grid <- build_grid(delta = audit_steps[it], 
+                       phi = phi, 
+                       num_strat = num_strat,
+                       phI_strat = phI_strat, 
+                       phIIa_strat = phIIa_strat, 
+                       min_n = min_n, 
+                       prev_grid_des = NULL, 
+                       prev_delta = NULL)  
+  }
+  
   if (any(grid[, grep("pi", colnames(grid))] > 1)) {
     return(warning("Invalid grid values - sampling more than available."))
   }
