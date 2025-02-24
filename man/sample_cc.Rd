@@ -4,7 +4,7 @@
 \alias{sample_cc}
 \title{Sample unvalidated case-control (CC*) audit based on Phase I variables.}
 \usage{
-sample_cc(dat, phI, phII, sample_on, wave1_Validated = NULL)
+sample_cc(dat, phI, phII, sample_on, prop_cases = 0.5, wave1_Validated = NULL)
 }
 \arguments{
 \item{dat}{Dataframe or matrix containing columns \code{sample_on}.}
@@ -14,6 +14,8 @@ sample_cc(dat, phI, phII, sample_on, wave1_Validated = NULL)
 \item{phII}{Phase II sample size.}
 
 \item{sample_on}{Column with the Phase I outcome variable (should be categorical) used for sampling strata (can be name or numeric index).}
+
+\item{prop_cases}{Proportion of the audit to be taken from cases (based on \code{sample_on}). Default is \code{prop_cases = 0.5} for even numbers of cases and controls.}
 
 \item{wave1_Validated}{(For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.}
 }

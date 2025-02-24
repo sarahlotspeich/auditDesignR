@@ -4,10 +4,11 @@
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
 #' @param sample_on Column with the Phase I outcome variable (should be categorical) used for sampling strata (can be name or numeric index).
+#' @param prop_cases Proportion of the audit to be taken from cases (based on \code{sample_on}). Default is \code{prop_cases = 0.5} for even numbers of cases and controls.
 #' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
-sample_cc <- function(dat, phI, phII, sample_on, wave1_Validated = NULL) {
+sample_cc <- function(dat, phI, phII, sample_on, prop_cases = 0.5, wave1_Validated = NULL) {
   if (length(wave1_Validated) == 0) {
     wave1_Validated = rep(FALSE, phI)
   }
@@ -16,7 +17,7 @@ sample_cc <- function(dat, phI, phII, sample_on, wave1_Validated = NULL) {
   phI_tab <- data.frame(table(dat[!wave1_Validated, sample_on]))
   colnames(phI_tab)[1] <- sample_on
   colnames(phI_tab)[2] <- "N"
-  phI_tab$target <- pmin(floor(phII / nrow(phI_tab)), phI_tab$N)
+  phI_tab$target <- pmin(floor(phII * c(1 - prop_cases, prop_cases)), phI_tab$N)
 
   # If any of the strata were too small, redistribute leftover
   while(sum(phI_tab$target) < phII) {
