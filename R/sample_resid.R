@@ -45,9 +45,13 @@ sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL
     y = fit$model[[1]][, 1] ### number of successes
     n = rowSums(fit$model[[1]]) ### number of trials
     r  = as.vector(y - n * exp(mu))
-  } else if (family %in% c("poisson", "negbin")) {
+  } else if (family == "poisson") {
     ## Residuals for Poisson regression: Y - e ^ mu
     r = as.vector(fit$y - exp(mu))  
+  } else if (family == "negbin") {
+    ## Residuals for negative binomial regression (scaled): (Y - e ^ mu) / sqrt(e ^ mu - e ^ 2mu / theta)
+    r = as.vector((fit$y - exp(mu)) / 
+                    sqrt(exp(mu) - (exp(mu) ^ 2) / fit$theta))  
   }
   
   resid_id = data.frame(id = 1:phI, 
