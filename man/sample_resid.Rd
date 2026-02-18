@@ -7,7 +7,7 @@
 sample_resid(formula, family, dat, phI, phII, wave1_Validated = NULL)
 }
 \arguments{
-\item{formula}{Model formula used to calculate residuals, passed to \code{glm()}.}
+\item{formula}{Model formula used to calculate residuals, passed to \code{glm()} or \code{glm.nb()}.}
 
 \item{family}{Type of model to be used to fit \code{formula}, passed to \code{glm()} or \code{glm.nb()}. Currently, the function accepts \code{family = "gaussian", "binomial", "poisson", "log-binomial",} or \code{"negbin"}.}
 

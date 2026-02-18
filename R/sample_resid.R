@@ -1,6 +1,6 @@
 #' Sample residual sample audit based on naive model from Phase I variables.
 #' @name sample_resid
-#' @param formula Model formula used to calculate residuals, passed to \code{glm()}.
+#' @param formula Model formula used to calculate residuals, passed to \code{glm()} or \code{glm.nb()}.
 #' @param family Type of model to be used to fit \code{formula}, passed to \code{glm()} or \code{glm.nb()}. Currently, the function accepts \code{family = "gaussian", "binomial", "poisson", "log-binomial",} or \code{"negbin"}.
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
