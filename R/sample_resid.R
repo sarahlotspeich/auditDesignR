@@ -1,7 +1,7 @@
 #' Sample residual sample audit based on naive model from Phase I variables.
 #' @name sample_resid
 #' @param formula Model formula used to calculate residuals, passed to \code{glm()}.
-#' @param family Type of model to be used to fit \code{formula}, passed to \code{glm()} or \code{glm.nb()}. Currently, the function accepts \code{family = "gaussian", "binomial", "poisson",} or \code{"negbin"}.
+#' @param family Type of model to be used to fit \code{formula}, passed to \code{glm()} or \code{glm.nb()}. Currently, the function accepts \code{family = "gaussian", "binomial", "poisson", "log-binomial",} or \code{"negbin"}.
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
@@ -20,6 +20,10 @@ sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL
   if (family == "negbin") {
     fit = glm.nb(formula = as.formula(formula), 
                  data = dat)  
+  } else if (family == "logbinom") {
+    fit = glm(formula = as.formula(formula),
+              family = binomial(link = "log"),
+              data = dat)
   } else {
     fit = glm(formula = as.formula(formula), 
               family = family, 
@@ -36,6 +40,11 @@ sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL
   } else if (family == "binomial") {
     ## Residuals for logistic regression: Y - 1 / (1 + e ^ mu)
     r = as.vector(fit$y - (1 + exp(- mu)) ^ (- 1))
+  } else if (family == "log-binomial") {
+    ## Residuals for log-binomial regression: Y - N * (e ^ mu)
+    y = fit$model[[1]][, 1] ### number of successes
+    n = rowSums(fit$model[[1]]) ### number of trials
+    r  = as.vector(y - n * exp(mu))
   } else if (family %in% c("poisson", "negbin")) {
     ## Residuals for Poisson regression: Y - e ^ mu
     r = as.vector(fit$y - exp(mu))  
