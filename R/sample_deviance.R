@@ -1,13 +1,15 @@
 #' Sample deviance sample audit based on naive model from Phase I variables.
 #' @name sample_deviance
-#' @param formula Model formula used to calculate deviances, passed to \code{glm()}.
-#' @param family Type of model to be used to fit \code{formula}, passed to \code{glm()}. Currently, the function accepts \code{family = "gaussian", "binomial",} or \code{"poisson"}.
+#' @param formula Model formula used to calculate residuals, passed to \code{glm()} or \code{glm.nb()}.
+#' @param family Type of model to be used to fit \code{formula}, passed to \code{glm()} or \code{glm.nb()}. Currently, the function accepts \code{family = "gaussian", "binomial", "poisson", "log-binomial",} or \code{"negbin"}.
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
 #' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
+#' @importFrom MASS glm.nb
+#' @importFrom stats glm
 sample_deviance <- function(formula, family, dat, phI, phII, wave1_Validated = NULL) {
   ## If single wave, set wave1_validated = FALSE for all
   if (length(wave1_Validated) == 0) {
@@ -15,9 +17,18 @@ sample_deviance <- function(formula, family, dat, phI, phII, wave1_Validated = N
   }
   
   ## Fit user-specified model
-  fit = glm(formula = as.formula(formula), 
-            family = family, 
-            data = dat)
+  if (family == "negbin") {
+    fit = glm.nb(formula = as.formula(formula), 
+                 data = dat)  
+  } else if (family == "logbinom") {
+    fit = glm(formula = as.formula(formula),
+              family = binomial(link = "log"),
+              data = dat)
+  } else {
+    fit = glm(formula = as.formula(formula), 
+              family = family, 
+              data = dat)
+  }
   
   ## Get linear predictor
   mu = predict(fit)
@@ -30,12 +41,28 @@ sample_deviance <- function(formula, family, dat, phI, phII, wave1_Validated = N
     ## Predicted probability of event 
     p = (1 + exp(- mu)) ^ (- 1)
     ## Deviance for logistic regression: 2 * Y - 1 / (1 + e ^ mu)
-    d = 2 * (fit$y * log(fit$y / p) + (1 - fit$y) * log((1 - fit$y) / (p)))
+    d = 2 * (fit$y * log(fit$y / p) + (1 - fit$y) * log((1 - fit$y) / (1 - p)))
   } else if (family == "poisson") {
     ## Predicted mean count
     lambda = exp(mu)
     ## Deviances for Poisson regression: Y log(Y / lambda) - (Y - lambda)
     d = as.vector(2 * (fit$y * log(fit$y / lambda) - (fit$y - lambda)))
+  } else if (family == "log-binomial") {
+    ## Predicted probability of event 
+    p = (1 + exp(- mu)) ^ (- 1)
+    ## Predict number of events 
+    y = fit$model[[1]][, 1] ### number of successes
+    n = rowSums(fit$model[[1]]) ### number of trials
+    lambda = n * p ### predicted number of events = number of trials * predicted probability
+    ## Deviance for log-binomial regression: 
+    d = as.vector(2 * (y * log(y / lambda) + 
+                         (n - y) * log((n - y) / (n - lambda))))
+  } else if (family == "negbin") {
+    ## Predict means 
+    lambda = exp(mu) 
+    ## Deviance for negative binomial regression
+    d = as.vector(2 * (fit$y * log(fit$y / lambda) - 
+                         (fit$y + fit$theta) * log((fit$y + fit$theta) / (lambda + fit$theta))))
   }
   
   dev_id = data.frame(id = 1:phI, 
