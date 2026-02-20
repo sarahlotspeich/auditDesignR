@@ -5,12 +5,13 @@
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
+#' @param tails Which tails to sample from. Default is \code{tails = "both"}, but \code{"lower"} and \code{"upper"} only are possible.
 #' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
 #' @importFrom MASS glm.nb
 #' @importFrom stats glm
-sample_deviance <- function(formula, family, dat, phI, phII, wave1_Validated = NULL) {
+sample_deviance <- function(formula, family, dat, phI, phII, tails = "both", wave1_Validated = NULL) {
   ## If single wave, set wave1_validated = FALSE for all
   if (length(wave1_Validated) == 0) {
     wave1_Validated = rep(FALSE, phI)
@@ -71,17 +72,33 @@ sample_deviance <- function(formula, family, dat, phI, phII, wave1_Validated = N
   ## If multi-wave, remove deviances from observations that were already validated
   dev_id = dev_id[!wave1_Validated, ]
   
-  ## Order ascendingly by deviances
-  dev_id = dev_id[order(dev_id$dev, decreasing = FALSE), ]
-  ### Only validate smallest n/2 devuals
-  smallest_dev = dev_id$id[1:(phII / 2)]
-  
-  ## Re-order descendingly by deviances
-  dev_id = dev_id[order(dev_id$dev, decreasing = TRUE), ]
-  ### Only validate smallest n/2 deviances
-  largest_dev = dev_id$id[1:(phII / 2)]
-  
-  ## Return validation indicator
-  V_dev = as.numeric(seq(1, phI) %in% c(smallest_dev, largest_dev))
+  if (tails == "both") {
+    ## Order ascendingly by deviances
+    dev_id = dev_id[order(dev_id$dev, decreasing = FALSE), ]
+    ### Only validate smallest n/2 devuals
+    smallest_dev = dev_id$id[1:(phII / 2)]
+    
+    ## Re-order descendingly by deviances
+    dev_id = dev_id[order(dev_id$dev, decreasing = TRUE), ]
+    ### Only validate smallest n/2 deviances
+    largest_dev = dev_id$id[1:(phII / 2)]
+    
+    ## Return validation indicator
+    V_dev = as.numeric(seq(1, phI) %in% c(smallest_dev, largest_dev))
+  } else if (tails == "lower") {
+    ## Order ascendingly by deviances
+    dev_id = dev_id[order(dev_id$dev, decreasing = FALSE), ]
+    ### Only validate smallest n/2 devuals
+    smallest_dev = dev_id$id[1:phII]
+    ## Return validation indicator
+    V_dev = as.numeric(seq(1, phI) %in% smallest_dev)
+  } else if (tails == "upper") {
+    ## Re-order descendingly by deviances
+    dev_id = dev_id[order(dev_id$dev, decreasing = TRUE), ]
+    ### Only validate smallest n/2 deviances
+    largest_dev = dev_id$id[1:phII]
+    ## Return validation indicator
+    V_dev = as.numeric(seq(1, phI) %in% largest_dev)
+  }
   return(V_dev)
 }
