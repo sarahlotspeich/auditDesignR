@@ -5,12 +5,13 @@
 #' @param dat Dataframe or matrix containing variables from \code{formula}.
 #' @param phI Phase I sample size.
 #' @param phII Phase II sample size.
+#' @param tails Which tails to sample from. Default is \code{tails = "both"}, but \code{"lower"} and \code{"upper"} only are possible.
 #' @param wave1_Validated (For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.
 #' @return A vector of length \code{phI} with validation indicators V = 1 if selected for Phase II and V = 0 otherwise.
 #' @export
 #' @importFrom MASS glm.nb
 #' @importFrom stats glm
-sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL) {
+sample_resid <- function(formula, family, dat, phI, phII, tails = "both", wave1_Validated = NULL) {
   ## If single wave, set wave1_validated = FALSE for all
   if (length(wave1_Validated) == 0) {
     wave1_Validated = rep(FALSE, phI)
@@ -60,17 +61,33 @@ sample_resid <- function(formula, family, dat, phI, phII, wave1_Validated = NULL
   ## If multi-wave, remove residuals from observations that were already validated
   resid_id = resid_id[!wave1_Validated, ]
   
-  ## Order ascendingly by residuals
-  resid_id = resid_id[order(resid_id$resid, decreasing = FALSE), ]
-  ### Only validate smallest n/2 residuals
-  smallest_resid = resid_id$id[1:(phII / 2)]
-  
-  ## Re-order descendingly by residuals
-  resid_id = resid_id[order(resid_id$resid, decreasing = TRUE), ]
-  ### Only validate smallest n/2 residuals
-  largest_resid = resid_id$id[1:(phII / 2)]
-  
-  ## Return validation indicator
-  V_resid = as.numeric(seq(1, phI) %in% c(smallest_resid, largest_resid))
+  if (tails == "both") {
+    ## Order ascendingly by residuals
+    resid_id = resid_id[order(resid_id$resid, decreasing = FALSE), ]
+    ### Only validate smallest n/2 residuals
+    smallest_resid = resid_id$id[1:(phII / 2)]
+    
+    ## Re-order descendingly by residuals
+    resid_id = resid_id[order(resid_id$resid, decreasing = TRUE), ]
+    ### Only validate smallest n/2 residuals
+    largest_resid = resid_id$id[1:(phII / 2)]
+    
+    ## Return validation indicator
+    V_resid = as.numeric(seq(1, phI) %in% c(smallest_resid, largest_resid))
+  } else if (tails == "lower") {
+    ## Order ascendingly by residuals
+    resid_id = resid_id[order(resid_id$resid, decreasing = FALSE), ]
+    ### Only validate smallest n/2 residuals
+    smallest_resid = resid_id$id[1:phII]
+    ## Return validation indicator
+    V_resid = as.numeric(seq(1, phI) %in% smallest_resid)
+  } else if (tails == "upper") {
+    ## Re-order descendingly by residuals
+    resid_id = resid_id[order(resid_id$resid, decreasing = TRUE), ]
+    ### Only validate smallest n/2 residuals
+    largest_resid = resid_id$id[1:phII]
+    ## Return validation indicator
+    V_resid = as.numeric(seq(1, phI) %in% largest_resid)
+  }
   return(V_resid)
 }

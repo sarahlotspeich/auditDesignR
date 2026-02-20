@@ -4,7 +4,15 @@
 \alias{sample_resid}
 \title{Sample residual sample audit based on naive model from Phase I variables.}
 \usage{
-sample_resid(formula, family, dat, phI, phII, wave1_Validated = NULL)
+sample_resid(
+  formula,
+  family,
+  dat,
+  phI,
+  phII,
+  tails = "both",
+  wave1_Validated = NULL
+)
 }
 \arguments{
 \item{formula}{Model formula used to calculate residuals, passed to \code{glm()} or \code{glm.nb()}.}
@@ -16,6 +24,8 @@ sample_resid(formula, family, dat, phI, phII, wave1_Validated = NULL)
 \item{phI}{Phase I sample size.}
 
 \item{phII}{Phase II sample size.}
+
+\item{tails}{Which tails to sample from. Default is \code{tails = "both"}, but \code{"lower"} and \code{"upper"} only are possible.}
 
 \item{wave1_Validated}{(For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.}
 }
