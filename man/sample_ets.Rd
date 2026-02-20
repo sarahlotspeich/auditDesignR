@@ -4,7 +4,7 @@
 \alias{sample_ets}
 \title{Extreme-tail sampling based on a single Phase I variable.}
 \usage{
-sample_ets(ets_dat, phI, phII, wave1_Validated = NULL)
+sample_ets(ets_dat, phI, phII, tails = "both", wave1_Validated = NULL)
 }
 \arguments{
 \item{ets_dat}{Vector containing one variable on which to sample.}
@@ -12,6 +12,8 @@ sample_ets(ets_dat, phI, phII, wave1_Validated = NULL)
 \item{phI}{Phase I sample size.}
 
 \item{phII}{Phase II sample size.}
+
+\item{tails}{Which tails to sample from. Default is \code{tails = "both"}, but \code{"lower"} and \code{"upper"} only are possible.}
 
 \item{wave1_Validated}{(For use with multi-wave designs) A logical vector with the validation indicator from first wave of audits.}
 }
