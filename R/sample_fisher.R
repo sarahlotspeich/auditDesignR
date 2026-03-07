@@ -39,28 +39,35 @@ sample_fisher <- function(formula, family, dat, phI, phII, tails = "both", wave1
   
   ## Calculate deviances (by model type)
   if(family == "gaussian") {
-    ## Deviance for linear regression: (Y - mu) ^ 2
-    d = as.vector((fit$y - mu) ^ 2)
+    ## Mean of X
+    xbar = mod_mat[, 2]
+    ## Fisher information contribution for linear regression: (Y - mu) ^ 2 / sigma^2
+    fi = as.vector((mod_mat[, 2] - xbar) ^ 2 / sigma(fit) ^ 2)
   } else if (family == "binomial") {
-    ## Predicted probability of event 
+    ## Predicted probability of event
     p = (1 + exp(- mu)) ^ (- 1)
-    ## Deviance for logistic regression: 2 * Y - 1 / (1 + e ^ mu)
-    d = 2 * (fit$y * log(fit$y / p) + (1 - fit$y) * log((1 - fit$y) / (1 - p)))
+    ## Fisher information weight
+    w = p * (1 - p)
+    ## Weighted mean of X = sum(w * X) / sum(w)
+    xbar_w = sum(w * mod_mat[, 2]) / sum(w)
+    ## Fisher Information contributions for logistic regression
+    fi = as.vector(w * (mod_mat[, 2] - xbar_w) ^ 2) 
   } else if (family == "poisson") {
     ## Predicted mean count
     lambda = exp(mu)
-    ## Deviances for Poisson regression: Y log(Y / lambda) - (Y - lambda)
-    d = as.vector(2 * (fit$y * log(fit$y / lambda) - (fit$y - lambda)))
+    ## Calculate mean predicted count = sum(mu * x) / sum(mu)
+    xbar_mu = sum(mu * mod_mat[, 2]) / sum(mu)
+    ## Fisher Information contributions for Poisson regression
+    fi = as.vector(mu * (mod_mat[, 2] - xbar_mu) ^ 2) 
   } else if (family == "log-binomial") {
-    ## Predicted probability of event 
-    p = (1 + exp(- mu)) ^ (- 1)
-    ## Predict number of events 
-    y = fit$model[[1]][, 1] ### number of successes
-    n = rowSums(fit$model[[1]]) ### number of trials
-    lambda = n * p ### predicted number of events = number of trials * predicted probability
-    ## Deviance for log-binomial regression: 
-    d = as.vector(2 * (y * log(y / lambda) + 
-                         (n - y) * log((n - y) / (n - lambda))))
+    ## Predicted mean count
+    lambda = exp(mu)
+    ## Fisher information weight
+    w = lambda / (1 - lambda)
+    ## Calculate mean predicted count = sum(w * x) / sum(w)
+    xbar_w = sum(w * mod_mat[, 2]) / sum(w)
+    ## Fisher Information contributions for log-binomial regression
+    fi = as.vector(w * (mod_mat[, 2] - xbar_w) ^ 2) 
   } else if (family == "negbin") {
     ## Predict means 
     lambda = exp(mu) 
