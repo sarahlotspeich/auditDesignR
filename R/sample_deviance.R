@@ -46,7 +46,7 @@ sample_deviance <- function(formula, family, dat, phI, phII, tails = "both", wav
   } else if (family == "poisson") {
     ## Predicted mean count
     lambda = exp(mu)
-    ## Deviances for Poisson regression: Y log(Y / lambda) - (Y - lambda)
+    ## Deviances for Poisson regression: 2 * Y log(Y / lambda) - (Y - lambda)
     d = as.vector(2 * (fit$y * log(fit$y / lambda) - (fit$y - lambda)))
   } else if (family == "log-binomial") {
     ## Predicted probability of event 
