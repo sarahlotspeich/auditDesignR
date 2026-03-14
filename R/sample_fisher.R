@@ -55,10 +55,10 @@ sample_fisher <- function(formula, family, dat, phI, phII, tails = "both", wave1
   } else if (family == "poisson") {
     ## Predicted mean count
     lambda = exp(mu)
-    ## Calculate mean predicted count = sum(mu * x) / sum(mu)
-    xbar_mu = sum(mu * mod_mat[, 2]) / sum(mu)
+    ## Calculate mean predicted count = sum(lambda * x) / sum(lambda)
+    xbar_lambda = sum(lambda * mod_mat[, 2]) / sum(lambda)
     ## Fisher Information contributions for Poisson regression
-    fi = as.vector(mu * (mod_mat[, 2] - xbar_mu) ^ 2) 
+    fi = as.vector(lambda * (mod_mat[, 2] - xbar_lambda) ^ 2) 
   } else if (family == "log-binomial") {
     ## Predicted mean count
     lambda = exp(mu)
